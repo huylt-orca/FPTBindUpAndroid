@@ -34,7 +34,7 @@ class _BottomBarState extends State<BottomBar> {
       appBar: AppBar(
         title: const Center(
           child:
-          Text("FPT ProductHunt"),
+          Text("FPT BindUP"),
         ),
       ),
       body: Center(
