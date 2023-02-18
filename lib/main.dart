@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
       LocalNotification.showNotification(event);
     });
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Bind Up',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
 

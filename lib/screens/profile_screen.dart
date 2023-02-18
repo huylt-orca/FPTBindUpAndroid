@@ -6,7 +6,20 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text("Profile"),
+      padding: EdgeInsets.all(10),
+      child: Column(
+        children: [
+          SizedBox(
+            width: 120,
+            height: 120,
+            child: ClipRect(
+              child: const Image(image: AssetImage("")),
+            ),
+          ),
+          const SizedBox(height: 10,),
+          Text("Name", style: TextStyle(fontSize: 20),)
+        ],
+      ),
     );
   }
 }

@@ -32,10 +32,14 @@ class _BottomBarState extends State<BottomBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(
-          child:
+        title:
           Text("FPT BindUP"),
+        leading: IconButton(
+          icon: Icon(Icons.account_circle),
+          iconSize: 30.0,
+          onPressed: () {  },
         ),
+
       ),
       body: Center(
         child: _widgetOptions[_selectedIndex],
