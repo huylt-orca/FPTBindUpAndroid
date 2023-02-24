@@ -1,5 +1,5 @@
 import 'package:android/screens/home_screen.dart';
-import 'package:android/screens/my_product_screen.dart';
+import 'package:android/screens/my_project_screen.dart';
 import 'package:android/screens/notification_screen.dart';
 import 'package:android/screens/profile_screen.dart';
 import 'package:fluentui_icons/fluentui_icons.dart';
@@ -17,7 +17,7 @@ class _BottomBarState extends State<BottomBar> {
   int _selectedIndex = 0;
   static final List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
-    MyProductScreen(),
+    MyProjectScreen(),
    NotificationScreen(),
     ProfileScreen(),
   ];

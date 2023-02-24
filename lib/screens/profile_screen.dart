@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -7,19 +8,7 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(10),
-      child: Column(
-        children: [
-          SizedBox(
-            width: 120,
-            height: 120,
-            child: ClipRect(
-              child: const Image(image: AssetImage("")),
-            ),
-          ),
-          const SizedBox(height: 10,),
-          Text("Name", style: TextStyle(fontSize: 20),)
-        ],
-      ),
+      child: Text("Profile")
     );
   }
 }

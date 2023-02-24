@@ -1,0 +1,29 @@
+import 'dart:convert';
+
+import 'package:android/models/project.dart';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+
+class ProjectRequest{
+  static const String url = "http://fhunt-env.eba-pr2amuxm.ap-southeast-1.elasticbeanstalk.com/api/v1/project/?pageNo=0&pageSize=10&sortBy=id";
+
+  static List<Project> parserTest(String responseBody){
+    var list1 = json.decode(responseBody) ;
+    var list = list1['data'] as List<dynamic>;
+    List<Project> projects = list.map((model) => Project.fromJson(model)).toList();
+    return projects;
+  }
+
+  static Future<List<Project>> fetchPosts({int page =1 }) async{
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode ==200){
+      return compute(parserTest,response.body);
+    } else if (response.statusCode ==404){
+      throw Exception('Not found');
+    } else{
+      throw Exception('Can\'t get');
+    }
+  }
+
+
+}

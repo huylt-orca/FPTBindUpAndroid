@@ -1,5 +1,6 @@
 import 'package:android/ForGroundLocalNotification.dart';
 import 'package:android/screens/bottom_bar.dart';
+import 'package:android/screens/project_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -43,10 +44,10 @@ class MyApp extends StatelessWidget {
       title: 'Bind Up',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-
         primarySwatch: Colors.deepOrange,
       ),
       home: const BottomBar(),
+      // home: const ProjectDetailScreen()
     );
   }
 }
