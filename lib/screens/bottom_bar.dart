@@ -33,7 +33,7 @@ class _BottomBarState extends State<BottomBar> {
     return Scaffold(
       appBar: AppBar(
         title:
-          Text("FPT BindUP"),
+          Text("BindUP"),
         leading: IconButton(
           icon: Icon(Icons.account_circle),
           iconSize: 30.0,

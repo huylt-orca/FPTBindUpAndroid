@@ -52,7 +52,9 @@ class HeaderProject extends StatelessWidget {
     ),
     ),
     ),
-    Text(this.description)
+    Text(this.description,textAlign: TextAlign.center,
+      ),
+
 
     ],
     ),

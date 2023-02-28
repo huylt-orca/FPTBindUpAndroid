@@ -44,11 +44,19 @@ dependencies:
   flutter_svg: ^1.1.6 # help to use SVG
   line_awesome_flutter: ^2.0.0
   http: ^0.13.5
+  provider: ^6.0.5
+  firebase_auth: ^4.2.9
+  flutter_native_splash: ^2.2.18
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+
+flutter_native_splash:
+  color: "#00B1FF"
+  image: assets/images/profileavatar.jpg
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

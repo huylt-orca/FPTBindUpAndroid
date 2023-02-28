@@ -5,18 +5,18 @@ import 'package:android/models/project.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
-class ProjectRequest{
-  static const String url = server + "project/?pageSize=4&sortBy=id";
+class ProjectDetailRequest{
+  static const String url = server + "project/";
 
-  static List<Project> parserTest(String responseBody){
+  static Project parserTest(String responseBody){
     var list1 = json.decode(responseBody) ;
-    var list = list1['data']['projectDTOList'] as List<dynamic>;
-    List<Project> projects = list.map((model) => Project.fromJson(model)).toList();
-    return projects;
+    var projectJson = list1['data'];
+    Project project =  Project.fromJson(projectJson);
+    return project;
   }
 
-  static Future<List<Project>> fetchPosts({int page =0 }) async{
-    final response = await http.get(Uri.parse(url + "&pageNo=$page"));
+  static Future<Project> fetchPosts({required String id }) async{
+    final response = await http.get(Uri.parse(url + id));
     if (response.statusCode ==200){
       return compute(parserTest,response.body);
     } else if (response.statusCode ==404){

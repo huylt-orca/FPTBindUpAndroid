@@ -1,4 +1,5 @@
 import 'package:android/ForGroundLocalNotification.dart';
+import 'package:android/constants.dart';
 import 'package:android/screens/bottom_bar.dart';
 import 'package:android/screens/project_detail_screen.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
       title: 'Bind Up',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
+        primarySwatch: mCustomMainColor,
       ),
       home: const BottomBar(),
       // home: const ProjectDetailScreen()

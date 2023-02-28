@@ -12,13 +12,14 @@ class ListViewProjectHome extends StatefulWidget {
 }
 
 class _ListViewProjectHomeState extends State<ListViewProjectHome> {
-
+final scrollController = ScrollController();
   List<Project> list = List<Project>.empty(growable: true);
-
+int page =0;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    scrollController.addListener(_scrollListener);
     ProjectRequest.fetchPosts().then((data){
       setState(() {
         list = data;
@@ -30,6 +31,7 @@ class _ListViewProjectHomeState extends State<ListViewProjectHome> {
   Widget build(BuildContext context) {
     return Container(
       child: ListView.builder(
+        controller: scrollController,
         scrollDirection: Axis.vertical,
         itemCount: list.length,
         itemBuilder: (context,index){
@@ -40,5 +42,16 @@ class _ListViewProjectHomeState extends State<ListViewProjectHome> {
 
       ),
     );
+  }
+
+  void _scrollListener(){
+    if (scrollController.position.pixels == scrollController.position.maxScrollExtent){
+      this.page++;
+      ProjectRequest.fetchPosts(page: this.page).then((data){
+        setState(() {
+          list.addAll(data);
+        });
+      });
+    }
   }
 }
