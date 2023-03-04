@@ -1,4 +1,6 @@
 import 'package:android/screens/update_profile_screen.dart';
+import 'package:android/screens/user_application_screen.dart';
+import 'package:android/screens/user_change_password_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
@@ -64,11 +66,25 @@ class ProfileScreen extends StatelessWidget {
 
           ProfileMenuWidget(title: "Appication",
             icon: LineAwesomeIcons.pager,
-            onPress: (){},
+            onPress: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>
+                    UserApplicationScreen(),
+                ),
+              );
+            } ,
           ),
           ProfileMenuWidget(title: "Change password",
             icon: LineAwesomeIcons.alternate_pencil,
-            onPress: (){},
+            onPress: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>
+                    ChangePasswordScreen(),
+                ),
+              );
+            } ,
           ),
           ProfileMenuWidget(title: "Logout",
             icon: LineAwesomeIcons.alternate_sign_out,

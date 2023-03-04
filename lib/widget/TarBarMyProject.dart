@@ -4,43 +4,41 @@ import 'package:android/screens/project_changelog_screen.dart';
 import 'package:android/screens/project_member_screen.dart';
 import 'package:android/screens/project_milestones_screen.dart';
 import 'package:android/screens/project_overview_screen.dart';
+import 'package:android/widget/MyProjectWidget.dart';
 import 'package:flutter/material.dart';
 
-class TabBarProject extends StatefulWidget {
-  const TabBarProject({Key? key}) : super(key: key);
+class TabBarMyProject extends StatefulWidget {
+  const TabBarMyProject({Key? key}) : super(key: key);
 
   @override
-  State<TabBarProject> createState() => _TabBarProjectState();
+  State<TabBarMyProject> createState() => _TabBarMyProjectState();
 }
 
-class _TabBarProjectState extends State<TabBarProject> {
-  List<String> tabProject = ["Overview", "Milestones","Member", "Changelog", "Application"];
+class _TabBarMyProjectState extends State<TabBarMyProject> {
+  List<String> tabProject = ["Owner Project", "Team Project"];
   int selectedIndex = 0;
   static final List<Widget> _widgetOptions = <Widget>[
-    ProjectOverviewScreen(),
-    ProjectMilestonesScreen(currentStepProject: 1),
-    ProjectMemberScreen(),
-    ProjectChangelogScreen(),
-    ProjectApplicationScreen(),
+    MyProjectWidget(isOwner: true,),
+    MyProjectWidget(),
   ];
 
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.only(top: 30.0),
       child: Column(
         children: [
           SizedBox(
-            height: 25,
+            height: 30,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-                itemCount: tabProject.length,
-                itemBuilder: (context,index) =>
-                    buildTab(index),
+              itemCount: tabProject.length,
+              itemBuilder: (context,index) =>
+                  buildTab(index),
             ),
           ),
-          SizedBox(height: 20,),
+          SizedBox(height: 10,),
           Expanded(
             child: _widgetOptions[selectedIndex],
           )
@@ -57,15 +55,16 @@ class _TabBarProjectState extends State<TabBarProject> {
         });
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 50),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-                tabProject[index],
+              tabProject[index],
               style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: selectedIndex == index ? kTextColor: kTextLightColor
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: selectedIndex == index ? kTextColor: kTextLightColor
               ),
             ),
             Container(

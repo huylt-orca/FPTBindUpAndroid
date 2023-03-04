@@ -1,3 +1,5 @@
+
+
 import 'package:android/screens/project_detail_screen.dart';
 import 'package:android/widget/ProjectTypeWidget.dart';
 import 'package:flutter/material.dart';
@@ -6,26 +8,19 @@ class ProjectMemberCard extends StatelessWidget {
   final String name;
   final String description;
   final String image;
+  final bool isOwner ;
   const ProjectMemberCard(
       { Key? key,
         required this.name,
         required this.description,
-        required this.image
+        required this.image,
+        this.isOwner =false
       }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) =>
-        //       // ProjectDetailScreen(
-        //       //   name: this.name,
-        //       //   description: this.description,
-        //       // )),
-        // );
-      },
+      onTap: (){},
       child: Container(
         margin: EdgeInsets.all(10),
         padding: EdgeInsets.all(5),
@@ -50,14 +45,14 @@ class ProjectMemberCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(100),
                 child: Image.network(
                   this.image,
-                  width: 120,
-                  height: 120,
+                  width: 50,
+                  height: 50,
                   fit: BoxFit.cover,
                 ),
               ),
             ),
             Container(
-              width: 200,
+              width: 240,
               margin: EdgeInsets.all(10),
               decoration: BoxDecoration(
                   color: Colors.white
@@ -81,6 +76,55 @@ class ProjectMemberCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis ,
                   ),
                 ],
+              ),
+            ),
+            Visibility(
+              visible: isOwner,
+              child: Container(
+                child: Column(
+                  children: [
+                    SizedBox(height: 5,),
+                    SizedBox(
+                      height:20,
+                      child: ElevatedButton(
+                          onPressed: (){},
+                          style: ButtonStyle(
+                            minimumSize: MaterialStateProperty.all(Size(50, 20)),
+                            backgroundColor: MaterialStateProperty.all(Colors.green),
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                              EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                          ),),
+                          child: Text('Apply',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12
+                          ),
+                          )
+                      ),
+                    ),
+                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 20,
+                      child: ElevatedButton(
+                          onPressed: (){},
+                          style: ButtonStyle(
+                            minimumSize: MaterialStateProperty.all(Size(50, 20)),
+                            backgroundColor: MaterialStateProperty.all(Colors.red),
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                              EdgeInsets.zero,
+                            ),),
+                          child: Text('Reject',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12
+                            ),
+                          )
+                      ),
+                    ),
+                  ],
+                ),
               ),
             )
           ],

@@ -34,11 +34,11 @@ class _BottomBarState extends State<BottomBar> {
       appBar: AppBar(
         title:
           Text("BindUP"),
-        leading: IconButton(
-          icon: Icon(Icons.account_circle),
-          iconSize: 30.0,
-          onPressed: () {  },
-        ),
+        // leading: IconButton(
+        //   icon: Icon(Icons.account_circle),
+        //   iconSize: 30.0,
+        //   onPressed: () {  },
+        // ),
 
       ),
       body: Center(

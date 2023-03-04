@@ -47,6 +47,7 @@ dependencies:
   provider: ^6.0.5
   firebase_auth: ^4.2.9
   flutter_native_splash: ^2.2.18
+  google_sign_in: ^6.0.2
 
 
 dev_dependencies:
@@ -56,7 +57,7 @@ dev_dependencies:
 
 flutter_native_splash:
   color: "#00B1FF"
-  image: assets/images/profileavatar.jpg
+  #image: assets/images/profileavatar.jpg
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

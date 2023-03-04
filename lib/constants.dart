@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'models/responsetest.dart';
+
 const server = "http://fhunt-env.eba-pr2amuxm.ap-southeast-1.elasticbeanstalk.com/api/v1/";
 
 const kTextColor = Color(0xFF535353);
@@ -26,3 +28,52 @@ MaterialColor mCustomMainColor = MaterialColor(
 
 
 const kDefaultPadding = 20.0;
+
+const imageDemo = "https://static.wikia.nocookie.net/leagueoflegends/images/0/04/Chibi_Ahri_Base_Tier_1.png/revision/latest?cb=20230208203819";
+
+const List<String> imageUrlsDemo = [
+  imageDemo,imageDemo,imageDemo,imageDemo,imageDemo,imageDemo,imageDemo,imageDemo,
+  imageDemo,imageDemo,imageDemo,imageDemo,imageDemo,imageDemo,imageDemo,imageDemo,
+  imageDemo,imageDemo,imageDemo,imageDemo,imageDemo,imageDemo,imageDemo,imageDemo,
+];
+
+
+
+
+List<ResponseTest> listTest = [
+   ResponseTest(
+    createdDate: "20:00, 20/20/2020",
+    description: "Heloo Description",
+    id: "1",
+    link: imageDemo,
+    title: "Thanh Huy"
+  ),
+  ResponseTest(
+      createdDate: "20:00, 20/20/2020",
+      description: "Heloo Description",
+      id: "1",
+      link: imageDemo,
+      title: "Thanh Huy"
+  ),
+  ResponseTest(
+      createdDate: "20:00, 20/20/2020",
+      description: "Heloo Description",
+      id: "1",
+      link: imageDemo,
+      title: "Thanh Huy"
+  ),
+  ResponseTest(
+      createdDate: "20:00, 20/20/2020",
+      description: "Heloo Description",
+      id: "1",
+      link: imageDemo,
+      title: "Thanh Huy"
+  ),
+  ResponseTest(
+      createdDate: "20:00, 20/20/2020",
+      description: "Heloo Description",
+      id: "1",
+      link: imageDemo,
+      title: "Thanh Huy"
+  ),
+];

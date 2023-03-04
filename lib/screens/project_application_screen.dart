@@ -1,3 +1,5 @@
+import 'package:android/constants.dart';
+import 'package:android/widget/ProjectMemberCard.dart';
 import 'package:flutter/material.dart';
 
 class ProjectApplicationScreen extends StatelessWidget {
@@ -6,7 +8,16 @@ class ProjectApplicationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text("Application"),
+      child: Column(
+        children: [
+          ProjectMemberCard(
+              name: "Thanh Huy",
+              description: "Develop",
+              image: imageDemo,
+              isOwner: true,
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1,6 +1,11 @@
+import 'package:android/constants.dart';
+import 'package:android/models/responsetest.dart';
+import 'package:android/widget/NotificationCard.dart';
 import 'package:android/widget/TabBarProject.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../widget/ChangeLogCard.dart';
 
 class NotificationScreen extends StatelessWidget {
   const NotificationScreen({Key? key}) : super(key: key);
@@ -8,10 +13,30 @@ class NotificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text("klsdfa")
+    List<ResponseTest> list = listTest;
+    return ListView.builder(
+      itemCount: list.length,
+      itemBuilder: (context,index) {
+        return NotificationCard(
+            title: list[index].title!,
+            description: list[index].description!,
+            image: list[index].link!,
+            time: list[index].createdDate!
+        );
+      },
     );
+      //   NotificationCard(
+      //   title: "Title",
+      //   description: "Description",
+      //   image: "https://firebasestorage.googleapis.com/v0/b/fptproducthunt.appspot.com/o/imageFour.gif?alt=media&token=4b9438d2-9521-49bc-abd4-28cd4f8cefdb",
+      //   time: "07:00, 12/03/2023",
+      // ),
+
   }
+
+
+
+
 
   Widget listView(){
     return ListView.separated(

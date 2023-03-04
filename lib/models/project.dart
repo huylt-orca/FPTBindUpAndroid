@@ -7,10 +7,20 @@ class Project {
   String? source;
   int? voteQuantity;
   int? milestone;
+  String? status;
 
 
-  Project({this.id, this.name, this.summary, this.logo,
-    this.description,this.source, this.voteQuantity, this.milestone});
+  Project({
+    this.id,
+    this.name,
+    this.summary,
+    this.logo,
+    this.description,
+    this.source,
+    this.voteQuantity,
+    this.milestone,
+    this.status,
+  });
 
   Project.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -21,6 +31,7 @@ class Project {
     source = json['source'];
     voteQuantity = json['voteQuantity'];
     milestone = json['milestone'];
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -33,7 +44,7 @@ class Project {
     data['source'] = this.source;
     data['voteQuantity'] = this.voteQuantity;
     data['milestone'] = this.milestone;
-
+    data['status'] = this.status;
     return data;
   }
 }
