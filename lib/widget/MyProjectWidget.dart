@@ -1,5 +1,6 @@
 import 'package:android/constants.dart';
 import 'package:android/models/responsetest.dart';
+import 'package:android/screens/project_create_screen.dart';
 import 'package:android/widget/MyProjectCard.dart';
 import 'package:flutter/material.dart';
 
@@ -37,7 +38,14 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
                 child: Container(
                   margin: const EdgeInsets.only(right: 10),
                   child: ElevatedButton(
-                      onPressed: (){},
+                      onPressed: (){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) =>
+                                CreateProjectScreen(),
+                            ),
+                          );
+                      },
                       child: Text("Create"),
                   ),
                 ),

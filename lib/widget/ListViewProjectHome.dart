@@ -28,19 +28,43 @@ final scrollController = ScrollController();
     });
   }
 
+  void _runFilter (String value){
+
+    setState(() {
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListView.builder(
-        controller: scrollController,
-        scrollDirection: Axis.vertical,
-        itemCount: list.length,
-        itemBuilder: (context,index){
-          return ProjectCard(name: list[index].name!,
-          description: list[index].description!,
-          image: list[index].logo!,);
-        },
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        children: [
+          TextField(
+            onChanged: (value) => _runFilter(value),
+            decoration: InputDecoration(
+              labelText: 'Search',
+              suffixIcon: Icon(Icons.search)
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Expanded(
+            child: ListView.builder(
+              controller: scrollController,
+              scrollDirection: Axis.vertical,
+              itemCount: list.length,
+              itemBuilder: (context,index){
+                return ProjectCard(name: list[index].name!,
+                description: list[index].description!,
+                image: list[index].logo!,);
+              },
 
+            ),
+          ),
+        ],
       ),
     );
   }
