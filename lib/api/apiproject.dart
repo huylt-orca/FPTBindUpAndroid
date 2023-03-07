@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:android/constants.dart';
-import 'package:android/models/project.dart';
+import 'package:android/models/Project.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
@@ -12,6 +12,7 @@ class ProjectRequest{
     var list1 = json.decode(responseBody) ;
     var list = list1['data']['projectDTOList'] as List<dynamic>;
     List<Project> projects = list.map((model) => Project.fromJson(model)).toList();
+    print(projects[0].logo);
     return projects;
   }
 

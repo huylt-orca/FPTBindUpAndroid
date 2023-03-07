@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:get/get.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -47,7 +48,7 @@ class MyApp extends StatelessWidget {
     FirebaseMessaging.onMessage.listen((event) {
       LocalNotification.showNotification(event);
     });
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Bind Up',
       debugShowCheckedModeBanner: false,
       debugShowMaterialGrid: false,

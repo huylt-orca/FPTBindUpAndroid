@@ -1,14 +1,23 @@
 import 'package:android/constants.dart';
+import 'package:android/controller/ProjectController.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../models/ProjectImage.dart';
 
 class ProjectOverviewScreen extends StatelessWidget {
-  const ProjectOverviewScreen({Key? key}) : super(key: key);
-  final List<String> imageUrls = imageUrlsDemo;
+  // final List<String> imageUrls = imageUrlsDemo;
+  const ProjectOverviewScreen({
+    Key? key,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    final ProjectController projectController = Get.put(ProjectController());
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         height: 230,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -18,13 +27,13 @@ class ProjectOverviewScreen extends StatelessWidget {
               height: 100,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: imageUrls.length,
+                itemCount: projectController.images.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0),
                     child: SizedBox(
                       width: 100,
-                        child: Image.network(imageUrls[index], fit: BoxFit.cover)),
+                        child: Image.network(projectController.images[index].directory!, fit: BoxFit.cover)),
                   );
                 },
               ),
@@ -34,8 +43,7 @@ class ProjectOverviewScreen extends StatelessWidget {
               fontSize: 20,
               fontWeight: FontWeight.bold
             ),),
-            Text("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been "
-                "the industry's standard dummy text ever since the 1500s"),
+            Text("this.summary!"),
             SizedBox(height: 10,),
 
             Text("Jobs", style: TextStyle(fontSize: 20,

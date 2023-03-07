@@ -1,7 +1,7 @@
 import 'package:android/api/apiproject.dart';
 import 'package:android/api/callapitest.dart';
 import 'package:android/models/test.dart';
-import 'package:android/models/project.dart';
+import 'package:android/models/Project.dart';
 import 'package:flutter/material.dart';
 
 import '../widget/TarBarMyProject.dart';
@@ -36,11 +36,6 @@ class _ListViewPageState extends State<ListViewPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // NetworkRequest.fetchPosts().then((data){
-    //   setState(() {
-    //     list = data;
-    //   });
-    // });
     ProjectRequest.fetchPosts().then((data) {
       setState(() {
         print(data.length);

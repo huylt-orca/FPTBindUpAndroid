@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'models/responsetest.dart';
 
 const server = "http://fhunt-env.eba-pr2amuxm.ap-southeast-1.elasticbeanstalk.com/api/v1/";
+const imageDefault = imageDemo;
 
 const kTextColor = Color(0xFF535353);
 const kTextLightColor = Color(0xFFACACAC);

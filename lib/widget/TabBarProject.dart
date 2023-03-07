@@ -1,10 +1,15 @@
 import 'package:android/constants.dart';
+import 'package:android/controller/ProjectController.dart';
+import 'package:android/models/Project.dart';
+import 'package:android/models/ProjectImage.dart';
 import 'package:android/screens/project_application_screen.dart';
 import 'package:android/screens/project_changelog_screen.dart';
 import 'package:android/screens/project_member_screen.dart';
 import 'package:android/screens/project_milestones_screen.dart';
 import 'package:android/screens/project_overview_screen.dart';
+import 'package:android/services/ProjectService.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class TabBarProject extends StatefulWidget {
   const TabBarProject({Key? key}) : super(key: key);
@@ -14,16 +19,23 @@ class TabBarProject extends StatefulWidget {
 }
 
 class _TabBarProjectState extends State<TabBarProject> {
+
   List<String> tabProject = ["Overview", "Milestones","Member", "Changelog", "Application"];
   int selectedIndex = 0;
   static final List<Widget> _widgetOptions = <Widget>[
     ProjectOverviewScreen(),
-    ProjectMilestonesScreen(currentStepProject: 1),
+    ProjectMilestonesScreen(),
     ProjectMemberScreen(),
     ProjectChangelogScreen(),
     ProjectApplicationScreen(),
   ];
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +53,7 @@ class _TabBarProjectState extends State<TabBarProject> {
             ),
           ),
           SizedBox(height: 20,),
-          Expanded(
+          Container(
             child: _widgetOptions[selectedIndex],
           )
         ],

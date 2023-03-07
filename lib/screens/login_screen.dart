@@ -82,13 +82,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: ElevatedButton(
                                     onPressed: () async {
                                       try {
-
-                                        UserCredential userCredential =
-                                        await authService
-                                            .signInWithEmailAndPassword(
-                                            _txtEmail.text
-                                            , _txtPassword.text
+                                        String token = await authService
+                                                      .signInWithEmailAndPassword(
+                                            _txtEmail.text,
+                                            _txtPassword.text
                                         );
+                                        print(token);
+
+                                        // UserCredential userCredential =
+                                        // await authService
+                                        //     .signInWithEmailAndPassword(
+                                        //     _txtEmail.text
+                                        //     , _txtPassword.text
+                                        // );
                                         print('success');
                                       }catch (error){
                                         print('failed');

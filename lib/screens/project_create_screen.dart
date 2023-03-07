@@ -22,37 +22,35 @@ class CreateProjectScreen extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              // Stack(
-              //   children: [
-              //     SizedBox(
-              //       width: 120,
-              //       height: 120,
-              //       child: ClipRRect(
-              //         borderRadius: BorderRadius.circular(100),
-              //         child: const Image(image: AssetImage("assets/images/profileavatar.jpg"
-              //         )),
-              //       ),
-              //     ),
-              //     Positioned(
-              //         bottom: 0,
-              //         right: 0,
-              //         child: Container(
-              //           width: 35,
-              //           height: 35,
-              //           decoration: BoxDecoration(
-              //               borderRadius: BorderRadius.circular(100),
-              //               color: mCustomMainColor
-              //           ),
-              //           child: const Icon(
-              //             LineAwesomeIcons.camera,
-              //             color: Colors.black,
-              //             size: 20,
-              //           ),
-              //         )
-              //     )
-              //   ],
-              // ),
-              // const SizedBox(height: 50,),
+              Stack(
+                children: [
+                  SizedBox(
+                    width: 120,
+                    height: 120,
+                    child: const Image(
+                        image: AssetImage("assets/images/profileavatar.jpg"
+                    )),
+                  ),
+                  Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        width: 35,
+                        height: 35,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: mCustomMainColor
+                        ),
+                        child:  Icon(
+                          LineAwesomeIcons.camera,
+                          color: Colors.black,
+                          size: 20,
+                        ),
+                      )
+                  )
+                ],
+              ),
+              const SizedBox(height: 10,),
               Form(
                   child:Column(
                     children: [
@@ -101,7 +99,9 @@ class CreateProjectScreen extends StatelessWidget {
                       SizedBox(
                         width: 200,
                         child: ElevatedButton(
-                          onPressed: (){},
+                          onPressed: (){
+
+                          },
                           style: ElevatedButton.styleFrom(
                               side: BorderSide.none, shape: const StadiumBorder()
                           ),

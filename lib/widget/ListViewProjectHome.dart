@@ -1,4 +1,5 @@
-import 'package:android/models/project.dart';
+import 'package:android/models/Project.dart';
+import 'package:android/services/ProjectService.dart';
 import 'package:android/widget/ProjectCard.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +22,7 @@ final scrollController = ScrollController();
     // TODO: implement initState
     super.initState();
     scrollController.addListener(_scrollListener);
-    ProjectRequest.fetchPosts().then((data){
+    ProjectService.fetchProjectList().then((data){
       setState(() {
         list = data;
       });
@@ -57,9 +58,7 @@ final scrollController = ScrollController();
               scrollDirection: Axis.vertical,
               itemCount: list.length,
               itemBuilder: (context,index){
-                return ProjectCard(name: list[index].name!,
-                description: list[index].description!,
-                image: list[index].logo!,);
+                return ProjectCard(project: list[index]);
               },
 
             ),
@@ -72,7 +71,7 @@ final scrollController = ScrollController();
   void _scrollListener(){
     if (scrollController.position.pixels == scrollController.position.maxScrollExtent){
       this.page++;
-      ProjectRequest.fetchPosts(page: this.page).then((data){
+      ProjectService.fetchProjectList(page: this.page).then((data){
         setState(() {
           list.addAll(data);
         });

@@ -27,7 +27,8 @@ class LocalNotification{
         importance: Importance.max,
         priority: Priority.high,
       ),
-    ); _notiPlugin.show(
+    );
+    _notiPlugin.show(
       DateTime.now().microsecond,
       message.notification!.title,
       message.notification!.body,

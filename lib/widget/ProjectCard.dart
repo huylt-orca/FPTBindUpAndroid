@@ -1,31 +1,40 @@
+import 'package:android/constants.dart';
+import 'package:android/controller/ProjectController.dart';
+import 'package:android/models/Project.dart';
+import 'package:android/models/ProjectImage.dart';
 import 'package:android/screens/project_detail_screen.dart';
+import 'package:android/services/ProjectService.dart';
 import 'package:android/widget/ProjectTypeWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProjectCard extends StatelessWidget {
-  final String name;
-  final String description;
-  final String image;
-  final int voteQuantity =0;
+  final Project project;
   const ProjectCard(
       { Key? key,
-        required this.name,
-        required this.description,
-        required this.image,
-        voteQuantity
+        required this.project
       }) : super(key: key);
+
+  String? _getImage(){
+    return this.project.logo != "" ? this.project.logo : imageDefault;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final ProjectController projectController = Get.put(ProjectController());
     return GestureDetector(
-      onTap: (){
+      onTap: ()async{
+        print(this.project.id);
+        Project projectDetail = await ProjectService.fetchProjectDetail(this.project.id!);
+        projectController.AddProject(projectDetail);
+        List<ProjectImage> images = await ProjectService.fetchProjectImageList(this.project.id!);
+        projectController.AddListImage(images);
+
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) =>
-              ProjectDetailScreen(
-            name: this.name,
-            description: this.description,
-            image: this.image,)),
+             ProjectDetailScreen()
+          )
         );
       },
       child: Container(
@@ -53,7 +62,7 @@ class ProjectCard extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Image.network(
-                      this.image,
+                      this._getImage()!,
                       width: 80,
                       height: 80,
                       fit: BoxFit.cover,
@@ -70,7 +79,7 @@ class ProjectCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        this.name,
+                        this.project.name!,
                         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis ,
@@ -79,7 +88,7 @@ class ProjectCard extends StatelessWidget {
                         height: 5,
                       ),
                       Text(
-                      this.description,
+                      this.project.name!,
                      style: TextStyle(fontSize: 12),
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis ,
@@ -112,7 +121,7 @@ class ProjectCard extends StatelessWidget {
 
                     children: [
                       Icon(Icons.arrow_drop_up),
-                      Text("$voteQuantity")
+                      Text(this.project.voteQuantity.toString())
                     ],
                   )
                 )

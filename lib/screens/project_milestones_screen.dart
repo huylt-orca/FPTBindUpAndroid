@@ -1,12 +1,12 @@
+import 'package:android/controller/ProjectController.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProjectMilestonesScreen extends StatefulWidget {
-  final int currentStepProject;
   final bool isOwner = true;
   const ProjectMilestonesScreen({
     Key? key,
     isOwner,
-    required this.currentStepProject
   }) : super(key: key);
 
   @override
@@ -15,18 +15,23 @@ class ProjectMilestonesScreen extends StatefulWidget {
 }
 
 class _ProjectMilestonesScreenState extends State<ProjectMilestonesScreen> {
-  int _currentStep =0;
-
+  final ProjectController projectController = Get.put(ProjectController());
+  int _currentStep = 0;
   @override
   Widget build(BuildContext context) {
+
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Container(
         height: 280,
         child:  Stepper(
             currentStep: _currentStep,
-          onStepContinue: () {},
-          onStepCancel: () {},
+          onStepContinue: () {
+
+          },
+          onStepCancel: () {
+
+          },
             onStepTapped: (int value ){
               setState(() {
                 _currentStep = value;
@@ -57,26 +62,26 @@ class _ProjectMilestonesScreenState extends State<ProjectMilestonesScreen> {
               Step(
                 title: Text('Idea'),
                 content: Text('Lên ý tưởng'),
-                isActive: widget.currentStepProject >=0,
-                state: widget.currentStepProject >=0 ? StepState.complete :StepState.indexed
+                isActive: projectController.milestone.value >=0,
+                state: projectController.milestone.value >=0 ? StepState.complete :StepState.indexed
               ),
               Step(
                 title: Text('Upcoming'),
                 content: Text('Tìm kiếm tài năng gánh team'),
-                  isActive: widget.currentStepProject >=1,
-                  state: widget.currentStepProject >=1 ? StepState.complete :StepState.indexed
+                  isActive: projectController.milestone.value >=1,
+                  state: projectController.milestone.value >=1 ? StepState.complete :StepState.indexed
               ),
               Step(
                 title: Text('Launching'),
                 content: Text('Deploy lên các nền tảng'),
-                  isActive: widget.currentStepProject >=2,
-                  state: widget.currentStepProject >=2 ? StepState.complete :StepState.indexed
+                  isActive: projectController.milestone.value >=2,
+                  state: projectController.milestone.value >=2 ? StepState.complete :StepState.indexed
               ),
               Step(
                 title: Text('Finishing'),
                 content: Text('Hết tiền, phá sản, nghỉ'),
-                  isActive: widget.currentStepProject >=3,
-                  state: widget.currentStepProject >=3 ? StepState.complete :StepState.indexed
+                  isActive: projectController.milestone.value >=3,
+                  state: projectController.milestone.value >=3 ? StepState.complete :StepState.indexed
               )
             ]
           ),

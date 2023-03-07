@@ -1,3 +1,4 @@
+import 'package:android/constants.dart';
 import 'package:android/screens/project_detail_screen.dart';
 import 'package:android/widget/ProjectTypeWidget.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,10 @@ class MyProjectCard extends StatelessWidget {
         required this.description,
         required this.image
       }) : super(key: key);
+
+  String _getImage(){
+  return this.image != "" ? this.image : imageDefault;
+   }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +45,7 @@ class MyProjectCard extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(5),
                 child: Image.network(
-                  this.image,
+                  this._getImage() ,
                   width: 80,
                   height: 80,
                   fit: BoxFit.cover,

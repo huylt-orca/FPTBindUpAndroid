@@ -1,3 +1,5 @@
+import 'package:android/constants.dart';
+
 class Project {
   String? id;
   String? name;
@@ -26,7 +28,7 @@ class Project {
     id = json['id'];
     name = json['name'];
     summary = json['summary'];
-    logo = json['logo'];
+    logo = json['logo'] == null ? imageDefault: json['logo'];
     description = json['description'];
     source = json['source'];
     voteQuantity = json['voteQuantity'];
@@ -39,7 +41,7 @@ class Project {
     data['id'] = this.id;
     data['name'] = this.name;
     data['summary'] = this.summary;
-    data['logo'] = this.logo;
+    data['logo'] = this.logo ;
     data['description'] = this.description;
     data['source'] = this.source;
     data['voteQuantity'] = this.voteQuantity;

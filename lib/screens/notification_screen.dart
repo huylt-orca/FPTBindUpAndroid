@@ -1,42 +1,75 @@
+
 import 'package:android/constants.dart';
 import 'package:android/models/responsetest.dart';
 import 'package:android/widget/NotificationCard.dart';
 import 'package:android/widget/TabBarProject.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 import '../widget/ChangeLogCard.dart';
 
-class NotificationScreen extends StatelessWidget {
+class NotificationScreen extends StatefulWidget {
   const NotificationScreen({Key? key}) : super(key: key);
 
+  @override
+  State<NotificationScreen> createState() => _NotificationScreenState();
+}
+
+class _NotificationScreenState extends State<NotificationScreen> {
+  List<RemoteMessage> _messages =[];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      setState(() {
+        _messages = [message,..._messages];
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    List<ResponseTest> list = listTest;
+
+    if (_messages.isEmpty){
+      return const Text("No Notification");
+    }
+
     return ListView.builder(
-      itemCount: list.length,
-      itemBuilder: (context,index) {
+        itemCount: _messages.length,
+          itemBuilder: (context,index){
+          RemoteMessage message = _messages[index];
+
         return NotificationCard(
-            title: list[index].title!,
-            description: list[index].description!,
-            image: list[index].link!,
-            time: list[index].createdDate!
+            title: message.notification?.title ?? "",
+            description: message.notification?.body ?? "",
+            image: message.notification?.android?.imageUrl.toString() ?? imageDemo,
+            time: message.sentTime!.toString()
         );
       },
-    );
-      //   NotificationCard(
-      //   title: "Title",
-      //   description: "Description",
-      //   image: "https://firebasestorage.googleapis.com/v0/b/fptproducthunt.appspot.com/o/imageFour.gif?alt=media&token=4b9438d2-9521-49bc-abd4-28cd4f8cefdb",
-      //   time: "07:00, 12/03/2023",
-      // ),
 
+    );
+    
   }
 
-
-
-
+  // @override
+  // Widget build(BuildContext context) {
+  //   List<ResponseTest> list = listTest;
+  //   return ListView.builder(
+  //     itemCount: list.length,
+  //     itemBuilder: (context,index) {
+  //       return NotificationCard(
+  //           title: list[index].title!,
+  //           description: list[index].description!,
+  //           image: list[index].link!,
+  //           time: list[index].createdDate!
+  //       );
+  //     },
+  //   );
+  //
+  // }
 
   Widget listView(){
     return ListView.separated(
@@ -135,5 +168,4 @@ class NotificationScreen extends StatelessWidget {
       ),
     );
   }
-
 }
