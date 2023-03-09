@@ -26,6 +26,7 @@ class ProjectCard extends StatelessWidget {
       onTap: ()async{
         print(this.project.id);
         Project projectDetail = await ProjectService.fetchProjectDetail(this.project.id!);
+
         projectController.AddProject(projectDetail);
         List<ProjectImage> images = await ProjectService.fetchProjectImageList(this.project.id!);
         projectController.AddListImage(images);
@@ -39,7 +40,8 @@ class ProjectCard extends StatelessWidget {
       },
       child: Container(
         margin: EdgeInsets.all(10),
-        padding: EdgeInsets.all(5), 
+        padding: EdgeInsets.all(5),
+
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(5),
@@ -93,16 +95,16 @@ class ProjectCard extends StatelessWidget {
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis ,
                       ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Row(
-                        children: [
-                          ProjectTypeWidget(text: "Topic",boxColor: Colors.deepOrange),
-                          ProjectTypeWidget(text: "Topic",boxColor: Colors.blue, textColor: Colors.red,),
-                          ProjectTypeWidget(text: "Topic"),
-                        ],
-                      )
+                      // SizedBox(
+                      //   height: 5,
+                      // ),
+                      // Row(
+                      //   children: [
+                      //     ProjectTypeWidget(text: "Topic",boxColor: Colors.deepOrange),
+                      //     ProjectTypeWidget(text: "Topic",boxColor: Colors.blue, textColor: Colors.red,),
+                      //     ProjectTypeWidget(text: "Topic"),
+                      //   ],
+                      // )
                     ],
                   ),
                 ),
@@ -111,7 +113,7 @@ class ProjectCard extends StatelessWidget {
             ),
             Positioned(
                 right: 0,
-                top: 30,
+                top: 25  ,
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.grey) ,

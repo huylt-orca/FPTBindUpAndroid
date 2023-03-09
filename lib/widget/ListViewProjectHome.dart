@@ -31,9 +31,12 @@ final scrollController = ScrollController();
 
   void _runFilter (String value){
 
-    setState(() {
-
+    ProjectService.fetchProjectList(nameKeyword: value).then((data){
+      setState(() {
+          list = data;
+      });
     });
+
   }
 
   @override

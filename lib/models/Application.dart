@@ -12,10 +12,10 @@ class Application {
   });
 
   Application.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    createDate = json['createDate'];
-    description = json['description'];
-    status = json['status'];
+    id = json['id'] ?? "";
+    createDate = json['createDate'] ?? "";
+    description = json['description'] ?? "";
+    status = json['status'] ?? "";
   }
 
   Map<String, dynamic> toJson() {

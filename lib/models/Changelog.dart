@@ -12,10 +12,10 @@ class Changelog {
   });
 
   Changelog.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    createdDate = json['createdDate'];
-    description = json['description'];
-    title = json['title'];
+    id = json['id'] ?? "";
+    createdDate = json['createdDate'] ?? "";
+    description = json['description'] ?? "";
+    title = json['title'] ?? "";
   }
 
   Map<String, dynamic> toJson() {

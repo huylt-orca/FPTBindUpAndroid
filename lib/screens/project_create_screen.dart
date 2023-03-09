@@ -1,12 +1,45 @@
+import 'dart:io';
+
 import 'package:android/constants.dart';
+import 'package:android/models/Project.dart';
+import 'package:android/services/ProjectService.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
-class CreateProjectScreen extends StatelessWidget {
+class CreateProjectScreen extends StatefulWidget {
   const CreateProjectScreen({Key? key}) : super(key: key);
 
   @override
+  State<CreateProjectScreen> createState() => _CreateProjectScreenState();
+}
+
+class _CreateProjectScreenState extends State<CreateProjectScreen> {
+  File? image;
+  final items = ['Khong','Co','Gi','Het'];
+  String? selectedItem;
+
+  ProjectService projectService = new ProjectService();
+
+  TextEditingController _txtName = TextEditingController();
+  TextEditingController _txtDescription = TextEditingController();
+  TextEditingController _txtSummary = TextEditingController();
+  TextEditingController _txtSource = TextEditingController();
+
+  TextEditingController _txtTopic = TextEditingController();
+  TextEditingController _txtPhone = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // selectedItem = items[0];
+  }
+
+  @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(),
@@ -27,24 +60,38 @@ class CreateProjectScreen extends StatelessWidget {
                   SizedBox(
                     width: 120,
                     height: 120,
-                    child: const Image(
-                        image: AssetImage("assets/images/profileavatar.jpg"
-                    )),
+                    child: this.image == null ? Image(
+                        image:  AssetImage("assets/images/profileavatar.jpg"
+                    ))
+                    : Image.file(this.image!)
+                    ,
                   ),
                   Positioned(
                       bottom: 0,
                       right: 0,
-                      child: Container(
-                        width: 35,
-                        height: 35,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: mCustomMainColor
-                        ),
-                        child:  Icon(
-                          LineAwesomeIcons.camera,
-                          color: Colors.black,
-                          size: 20,
+                      child: GestureDetector(
+                        onTap: ()async{
+                          try{
+                            final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                            if (image == null) return;
+                            final imageTemporary = File(image.path);
+                            setState(() => this.image = imageTemporary);
+                          } on PlatformException catch (e){
+                            print('Failed to pick image $e');
+                          }
+                        },
+                        child: Container(
+                          width: 35,
+                          height: 35,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              color: mCustomMainColor
+                          ),
+                          child:  Icon(
+                            LineAwesomeIcons.camera,
+                            color: Colors.black,
+                            size: 20,
+                          ),
                         ),
                       )
                   )
@@ -54,53 +101,85 @@ class CreateProjectScreen extends StatelessWidget {
               Form(
                   child:Column(
                     children: [
+
                       TextFormField(
+                        controller: _txtName,
                         decoration: const InputDecoration(
                             label: Text("Project Name"),
-                            prefixIcon: Icon(LineAwesomeIcons.male)
+                            prefixIcon: Icon(LineAwesomeIcons.alternate_pencil)
                         ),
                       ),
                       const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Container(
+                            width: 200,
+                            child: DropdownButton(
+                              hint: Text("Topic"),
+                              isExpanded:true,
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black
+                              ),
+                              items: items.map((String item) {
+                                return DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 10.0),
+                                    child: Text(item),
+                                  ),
+                                );
+                              }).toList(),
+                              value: selectedItem,
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  selectedItem = newValue!;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      )
+                      ,
+                      const SizedBox(height: 10),
                       TextFormField(
+                        controller: _txtSummary,
                         decoration: const InputDecoration(
-                            label: Text("Description"),
+                            label: Text("Summary"),
                             prefixIcon: Icon(LineAwesomeIcons.envelope)
                         ),
                       ),
                       const SizedBox(height: 10),
                       TextFormField(
+                        controller: _txtSource,
                         decoration: const InputDecoration(
-                            label: Text("Summary"),
+                            label: Text("Source"),
                             prefixIcon: Icon(LineAwesomeIcons.map)
                         ),
                       ),
                       const SizedBox(height: 10),
+
                       TextFormField(
+                        controller: _txtDescription,
                         decoration: const InputDecoration(
-                            label: Text("Topic"),
-                            prefixIcon: Icon(LineAwesomeIcons.genderless)
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                            label: Text("Headline"),
+                            label: Text("Description"),
                             prefixIcon: Icon(LineAwesomeIcons.book)
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                            label: Text("Phone"),
-                            prefixIcon: Icon(LineAwesomeIcons.phone)
                         ),
                       ),
                       const SizedBox(height: 10,),
                       SizedBox(
                         width: 200,
                         child: ElevatedButton(
-                          onPressed: (){
+                          onPressed: ()async{
 
+                            Project project = new Project(
+                                name: _txtName.text,
+                                summary: _txtSummary.text,
+                              description: _txtDescription.text,
+                              source: _txtSource.text
+                            );
+                             ProjectService.postProject(project, this.image);
+                             Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(
                               side: BorderSide.none, shape: const StadiumBorder()

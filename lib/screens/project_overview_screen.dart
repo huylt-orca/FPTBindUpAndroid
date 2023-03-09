@@ -1,6 +1,7 @@
 import 'package:android/constants.dart';
 import 'package:android/controller/ProjectController.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 
 import '../models/ProjectImage.dart';
@@ -23,7 +24,8 @@ class ProjectOverviewScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+           projectController.images.length !=0
+            ? SizedBox(
               height: 100,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -37,13 +39,16 @@ class ProjectOverviewScreen extends StatelessWidget {
                   );
                 },
               ),
-            ),
-            Text("Summary",
+            )
+            : SizedBox(height: 0,),
+            Text("Description",
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold
             ),),
-            Text("this.summary!"),
+            Html(
+                data: projectController.description.value
+            ),
             SizedBox(height: 10,),
 
             Text("Jobs", style: TextStyle(fontSize: 20,

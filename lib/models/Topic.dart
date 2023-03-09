@@ -12,10 +12,10 @@ class Topic {
   });
 
   Topic.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    description = json['description'];
-    name = json['name'];
-    shortName = json['shortName'];
+    id = json['id'] ?? "";
+    description = json['description'] ?? "";
+    name = json['name'] ?? "";
+    shortName = json['shortName'] ?? "";
   }
 
   Map<String, dynamic> toJson() {

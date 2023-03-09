@@ -1,3 +1,5 @@
+import 'package:android/constants.dart';
+
 class User {
   String? id;
   String? name;
@@ -24,16 +26,16 @@ class User {
   });
 
   User.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    gender = json['gender'];
-    headline = json['headline'];
-    description = json['description'];
-    address = json['address'];
-    phone = json['phone'];
-    avatar = json['avatar'];
-    email = json['email'];
-    role = json['role'];
+    id = json['id']??"";
+    name = json['name'] ?? "";
+    gender = json['gender'] ?? 0;
+    headline = json['headline'] ?? "";
+    description = json['description'] ?? "";
+    address = json['address'] ?? "";
+    phone = json['phone'] ?? "";
+    avatar = json['avatar'] ?? imageDemo;
+    email = json['email'] ?? "";
+    role = json['role'] ?? "";
 
   }
 

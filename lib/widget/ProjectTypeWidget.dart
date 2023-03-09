@@ -19,7 +19,10 @@ class ProjectTypeWidget extends StatelessWidget {
             color: this.boxColor,
             borderRadius: BorderRadius.circular(20),
           ),
-          child: Text(this.text,style: TextStyle(color: this.textColor)),
+          child: Text(this.text,style: TextStyle(
+              color: this.textColor,
+              fontSize: 10,
+          )),
         )
       ],),
     );

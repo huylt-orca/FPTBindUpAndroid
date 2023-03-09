@@ -1,9 +1,13 @@
+
 import 'package:android/ForGroundLocalNotification.dart';
 import 'package:android/constants.dart';
+import 'package:android/controller/UserController.dart';
 import 'package:android/screens/bottom_bar.dart';
 import 'package:android/screens/login_screen.dart';
 import 'package:android/screens/project_detail_screen.dart';
 import 'package:android/screens/test_screen.dart';
+import 'package:android/services/StorageService.dart';
+import 'package:android/services/UserService.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -11,6 +15,8 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+
+import 'models/User.dart';
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +27,20 @@ Future<void> main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   FlutterNativeSplash.remove();
   String token = await getToken();
-  print(token);
+  print('Token Device: $token}');
+
+  String? accessToken = await StorageService.getAccessToken();
+  if (accessToken != null && !accessToken.isEmpty){
+    try {
+      User user = await UserService.fetchUserDetail();
+      final UserController userController = Get.put(UserController());
+      userController.AddUser(user);
+    } catch(error){
+      print('Access Token: $accessToken}');
+      print(error);
+    }
+
+  }
 
   print('start');
   runApp(const MyApp());

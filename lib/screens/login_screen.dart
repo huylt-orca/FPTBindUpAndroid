@@ -1,6 +1,13 @@
+import 'package:android/models/User.dart' as UserModel;
 import 'package:android/services/AuthService.dart';
+import 'package:android/services/StorageService.dart';
+import 'package:android/services/UserService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../controller/UserController.dart';
+import 'bottom_bar.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -17,6 +24,11 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            leading: BackButton(color: Colors.black),
+          ),
           body: SingleChildScrollView(
             child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 20),
@@ -87,14 +99,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                             _txtEmail.text,
                                             _txtPassword.text
                                         );
-                                        print(token);
+                                        StorageService.saveAccessToken(token);
 
-                                        // UserCredential userCredential =
-                                        // await authService
-                                        //     .signInWithEmailAndPassword(
-                                        //     _txtEmail.text
-                                        //     , _txtPassword.text
-                                        // );
+                                        UserModel.User user = await UserService.fetchUserDetail();
+
+                                        final UserController userController = Get.put(UserController());
+
+                                        userController.AddUser(user);
+
+                                        Navigator.pop(context);
+
                                         print('success');
                                       }catch (error){
                                         print('failed');
@@ -120,7 +134,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             onPressed: () async{
                               try{
                                 UserCredential userCredential = await authService.signInWithGoogle();
-                                print(userCredential);
+
+                                UserModel.User user = await UserService.fetchUserDetail();
+
+                                final UserController userController = Get.put(UserController());
+
+                                userController.AddUser(user);
+
+                                Navigator.pop(context);
+
                                 print('Successful');
 
                               } catch(error){
@@ -144,6 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     TextButton(onPressed: () async{
                       await authService.signOut();
+
                     },
                         child: Text.rich(
                           TextSpan(

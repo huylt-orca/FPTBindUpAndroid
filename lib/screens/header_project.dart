@@ -2,6 +2,8 @@ import 'package:android/controller/ProjectController.dart';
 import 'package:android/widget/TabBarProject.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class HeaderProject extends StatelessWidget {
 
@@ -41,7 +43,16 @@ class HeaderProject extends StatelessWidget {
                     "Go to Web",
                     style: TextStyle(color: Colors.white),
                   ),
-                  onPressed: () {},
+                  onPressed: () async {
+                    String url = projectController.source.value!;
+                      if (!url.isEmpty){
+                        if (await canLaunch(url)) {
+                          await launch(url);
+                        } else {
+                          throw 'Could not launch $url';
+                        }
+                      }
+                  },
                   style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.all<Color>(Colors.orange),
@@ -55,7 +66,7 @@ class HeaderProject extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "${projectController.description}",
+                  "${projectController.summary}",
                   textAlign: TextAlign.center,
                 ),
               ],

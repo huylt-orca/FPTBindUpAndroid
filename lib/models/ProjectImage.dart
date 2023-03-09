@@ -1,3 +1,5 @@
+import 'package:android/constants.dart';
+
 class ProjectImage {
   String? id;
   String? directory;
@@ -8,8 +10,8 @@ class ProjectImage {
   });
 
   ProjectImage.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    directory = json['directory'];
+    id = json['id']?? "";
+    directory = json['directory'] ?? imageDemo;
   }
 
   Map<String, dynamic> toJson() {

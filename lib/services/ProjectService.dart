@@ -1,7 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:android/controller/UserController.dart';
 import 'package:android/models/ProjectImage.dart';
+import 'package:android/services/StorageService.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../constants.dart';
 import '../models/Project.dart';
@@ -31,8 +36,26 @@ class ProjectService{
     return images;
   }
 
-  static Future<List<Project>> fetchProjectList({int page =0 }) async{
-    final response = await http.get(Uri.parse(urlProject + "?pageSize=4&sortBy=id&statusType=-1&pageNo=$page"));
+  static Future<List<Project>> fetchProjectList({
+    int page =0,
+    int pageSize =4,
+    String sortBy = "id",
+    int statusType = 0,
+    String nameKeyword = ""
+  }) async{
+
+    String options =
+        "?pageSize=${pageSize}"
+        "&pageNo=${page}"
+        "&sortBy=${sortBy}"
+        "&statusType=${statusType}"
+    ;
+    if (!nameKeyword.isEmpty){
+      options = options + "&nameKeyWord=${nameKeyword}";
+    }
+
+
+    final response = await http.get(Uri.parse(urlProject + options));
     if (response.statusCode ==200){
       return compute(parserProjectList,response.body);
     } else if (response.statusCode ==404){
@@ -53,41 +76,6 @@ class ProjectService{
     }
   }
 
-  static Future<void> postProject(Project project) async {
-    var uri = Uri.parse(urlProject);
-
-    var body = jsonEncode({
-      'name': project.name,
-      'summary': project.summary,
-      'description': project.description,
-      'source': project.source,
-      'voteQuantity': 0,
-      'milestone': 0,
-      'founderId': '19d19cf5-68b7-4688-9a53-97f9ac2d1676',
-
-    });
-    var headers = {
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-    };
-
-    try {
-      var response = await http.post(uri, body: body, headers: headers);
-
-      if (response.statusCode == 200) {
-        var responseData = jsonDecode(response.body);
-        // Xử lý dữ liệu nhận được
-      } else {
-        // Xử lý lỗi
-        print('Error: ${response.reasonPhrase}');
-      }
-    } catch (error) {
-      // Xử lý lỗi khi không kết nối được đến API hoặc khi có lỗi trong quá trình gửi yêu cầu
-      print('Error: $error');
-    }
-  }
-
-
   static Future<List<ProjectImage>> fetchProjectImageList(String projectId) async{
     final response = await http.get(Uri.parse(urlProject + "$projectId/image/"));
     if (response.statusCode ==200){
@@ -98,4 +86,57 @@ class ProjectService{
       throw Exception('Can\'t get');
     }
   }
+
+
+  static Future<void> postProject(Project project,File? imageFile) async {
+    UserController userController = Get.put(UserController());
+
+    var uri = Uri.parse(urlProject);
+
+    var body = jsonEncode({
+      'name': project.name,
+      'summary': project.summary,
+      'description': project.description,
+      'source': project.source,
+      'voteQuantity': 0,
+      'milestone': 0,
+      'founderId': '${userController.id}',
+    });
+    var headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${await StorageService.getAccessToken()}'
+    };
+    try {
+      var response = await http.post(uri, body: body, headers: headers);
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        var responseData = jsonDecode(response.body);
+        print(responseData['data']);
+
+        if (imageFile != null) {
+          // upload image
+          final urlImage = urlProject + responseData['data'] + "/logo/";
+          final bytes = await imageFile.readAsBytes();
+          final responseImage = await http.post(
+              Uri.parse(urlImage),
+              body: bytes,
+              headers: headers
+          );
+          if (responseImage.statusCode == 200) {
+            print ("Upload Successful");
+          } else {
+            print('Error Upload Image');
+          }
+        }
+      } else {
+        print('Error: ${response.reasonPhrase}');
+      }
+    } catch (error) {
+      print('Error: $error');
+    }
+  }
+
+
+
 }

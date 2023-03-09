@@ -25,15 +25,15 @@ class Project {
   });
 
   Project.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    summary = json['summary'];
-    logo = json['logo'] == null ? imageDefault: json['logo'];
-    description = json['description'];
-    source = json['source'];
-    voteQuantity = json['voteQuantity'];
-    milestone = json['milestone'];
-    status = json['status'];
+    id = json['id'] ?? "";
+    name = json['name'] ?? "";
+    summary = json['summary'] ?? "";
+    logo = json['logo']  ?? imageDefault;
+    description = json['description'] ?? "";
+    source = json['source'] ?? "";
+    voteQuantity = json['voteQuantity'] ?? 0;
+    milestone = json['milestone'] ?? 0;
+    status = json['status'] ?? "";
   }
 
   Map<String, dynamic> toJson() {
