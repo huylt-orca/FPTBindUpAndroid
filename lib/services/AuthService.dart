@@ -40,21 +40,12 @@ class AuthService{
         print('Error: ${response.reasonPhrase}');
       }
     } catch (error) {
-      // Xử lý lỗi khi không kết nối được đến API hoặc khi có lỗi trong quá trình gửi yêu cầu
+      // Xử lý lỗi khi không kết nối được đến API
       print('Error: $error');
     }
     return'';
   }
 
-  // Future<UserCredential> signInWithEmailAndPassword1(String email, String password) async {
-  //
-  //   final UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-  //     email: email,
-  //     password: password,
-  //   );
-  //   print(userCredential);
-  //   return userCredential;
-  // }
 
   Future<UserCredential> signInWithGoogle() async {
 
@@ -96,10 +87,45 @@ class AuthService{
     } catch (error) {
     print('Error: $error');
     }
-
-
     return authResult;
   }
+
+  Future<String> registerAccount(
+  {required String username, required String password, required String fullname,
+    required int gender,required String email,required String phone}
+      ) async {
+    var uri = Uri.parse(urlAuth + "new");
+    var body = jsonEncode({
+      'username': username,
+      'password': password,
+      'gender': gender,
+      'email': email,
+      'name': fullname,
+      'phone': phone
+    });
+    var headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+    };
+
+    try {
+      var response = await http.post(uri, body: body, headers: headers);
+
+      if (response.statusCode == 200) {
+        var responseData = jsonDecode(response.body);
+        print("Access Token: " + responseData['token']);
+        return responseData['token'];
+      } else {
+
+        print('Error: ${response.reasonPhrase}');
+      }
+    } catch (error) {
+      // Xử lý lỗi khi không kết nối được đến API
+      print('Error: $error');
+    }
+    return'';
+  }
+
 
   Future<void> signOut() async {
     await googleSignIn.signOut();

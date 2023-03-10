@@ -16,6 +16,7 @@ class _ListViewProjectHomeState extends State<ListViewProjectHome> {
 final scrollController = ScrollController();
   List<Project> list = List<Project>.empty(growable: true);
   int page =0;
+  String keyword ="";
 
   @override
   void initState() {
@@ -46,7 +47,10 @@ final scrollController = ScrollController();
       child: Column(
         children: [
           TextField(
-            onChanged: (value) => _runFilter(value),
+            onChanged: (value) {
+              keyword=value;
+              _runFilter(value);
+            },
             decoration: InputDecoration(
               labelText: 'Search',
               suffixIcon: Icon(Icons.search)
@@ -74,7 +78,7 @@ final scrollController = ScrollController();
   void _scrollListener(){
     if (scrollController.position.pixels == scrollController.position.maxScrollExtent){
       this.page++;
-      ProjectService.fetchProjectList(page: this.page).then((data){
+      ProjectService.fetchProjectList(page: this.page,nameKeyword: this.keyword).then((data){
         setState(() {
           list.addAll(data);
         });

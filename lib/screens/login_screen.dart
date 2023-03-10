@@ -1,4 +1,5 @@
 import 'package:android/models/User.dart' as UserModel;
+import 'package:android/screens/signup_screen.dart';
 import 'package:android/services/AuthService.dart';
 import 'package:android/services/StorageService.dart';
 import 'package:android/services/UserService.dart';
@@ -85,7 +86,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               Align(
                                 alignment: Alignment.centerRight,
                                 child: TextButton(
-                                  onPressed: (){},
+                                  onPressed: ()async{
+                                    await authService.signOut();
+                                  },
                                   child: const Text('Forgot Password?'),
                                 ),
                               ),
@@ -165,7 +168,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 20,
                     ),
                     TextButton(onPressed: () async{
-                      await authService.signOut();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => SignUpScreen()),
+                      );
 
                     },
                         child: Text.rich(

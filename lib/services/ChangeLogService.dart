@@ -24,8 +24,20 @@ class ChangelogService{
   }
 
 
-  static Future<List<Changelog>> fetchChangelogList({int page =0 }) async{
-    final response = await http.get(Uri.parse(urlChangelog + "?pageSize=4&sortBy=id&statusType=-1&pageNo=$page"));
+  static Future<List<Changelog>> fetchChangelogList({
+        int page =0,
+        int pageSize =4,
+        bool paging = false,
+        required String projectId
+      }) async{
+
+    String options =
+        "?pageSize=${pageSize}"
+        "&pageNo=${page}"
+        "&paging=${paging}"
+        "&projectId=${projectId}"
+    ;
+    final response = await http.get(Uri.parse(urlChangelog + options));
     if (response.statusCode ==200){
       return compute(parserChangelogList,response.body);
     } else if (response.statusCode ==404){
@@ -35,8 +47,8 @@ class ChangelogService{
     }
   }
 
-  static Future<Changelog> fetchChangelogDetail( String topicId  ) async{
-    final response = await http.get(Uri.parse(urlChangelog + "$topicId"));
+  static Future<Changelog> fetchChangelogDetail( String changelogId  ) async{
+    final response = await http.get(Uri.parse(urlChangelog + "$changelogId"));
     if (response.statusCode ==200){
       return compute(parserChangelogDetail,response.body);
     } else if (response.statusCode ==404){

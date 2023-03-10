@@ -1,9 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:android/controller/ProjectController.dart';
 import 'package:android/controller/UserController.dart';
+import 'package:android/models/Application.dart';
+import 'package:android/models/Changelog.dart';
+import 'package:android/models/Job.dart';
+import 'package:android/models/Member.dart';
+import 'package:android/models/Mentor.dart';
 import 'package:android/models/ProjectImage.dart';
+import 'package:android/models/User.dart';
 import 'package:android/services/StorageService.dart';
+import 'package:android/services/UserService.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,6 +19,8 @@ import 'package:image_picker/image_picker.dart';
 import '../constants.dart';
 import '../models/Project.dart';
 import 'package:http/http.dart' as http;
+
+import '../models/Topic.dart';
 
 class ProjectService{
   static const String urlProject = server + "project/";
@@ -34,6 +44,49 @@ class ProjectService{
     var list = data['data'] as List<dynamic>;
     List<ProjectImage> images = list.map((model) => ProjectImage.fromJson(model)).toList();
     return images;
+  }
+
+  static List<ProjectImage> parserProjectImageListFromProject(var data){
+    var list = data as List<dynamic>;
+    List<ProjectImage> images = list.map((model) => ProjectImage.fromJson(model)).toList();
+    return images;
+  }
+
+
+  static List<Mentor> parserMentorListFromProject(var data){
+    var list = data  as List<dynamic>;
+    List<Mentor> mentors = list.map((model) => Mentor.fromJson(model)).toList();
+    return mentors;
+  }
+
+  static List<Member> parserMembersListFromProject(var data){
+    var list = data as List<dynamic>;
+    List<Member> members = list.map((model) => Member.fromJson(model)).toList();
+    return members;
+  }
+
+  static List<Job> parserJobsListFromProject(var data){
+    var list = data as List<dynamic>;
+    List<Job> jobs = list.map((model) => Job.fromJson(model)).toList();
+    return jobs;
+  }
+
+  static List<Application> parserApplicationsListFromProject(var data){
+    var list = data as List<dynamic>;
+    List<Application> applications = list.map((model) => Application.fromJson(model)).toList();
+    return applications;
+  }
+
+  static List<Changelog> parserChangelogListFromProject(var data){
+    var list = data as List<dynamic>;
+    List<Changelog> changelogs = list.map((model) => Changelog.fromJson(model)).toList();
+    return changelogs;
+  }
+
+  static List<Topic> parserTopicsListFromProject(var data){
+    var list = data as List<dynamic>;
+    List<Topic> topics = list.map((model) => Topic.fromJson(model)).toList();
+    return topics;
   }
 
   static Future<List<Project>> fetchProjectList({
@@ -66,9 +119,49 @@ class ProjectService{
   }
 
   static Future<Project> fetchProjectDetail( String projectId  ) async{
-    final response = await http.get(Uri.parse(urlProject + "$projectId"));
+    final response = await http.get(Uri.parse(urlProject + "${projectId}"));
     if (response.statusCode ==200){
-      return compute(parserProjectDetail,response.body);
+      ProjectController projectController = Get.put(ProjectController());
+      var data = json.decode(response.body)['data'];
+      print(data['images'].length);
+      
+      Project project = Project.fromJson(data);
+      projectController.AddProject(project);
+      projectController.RemoveAllInformationProject();
+
+
+      projectController.founder = Rx(User.fromJson(data['founder']));
+
+      if (!(data['images'].length == 0)){
+        List<ProjectImage> images = parserProjectImageListFromProject(data['images']);
+        projectController.images = RxList(images);
+      }
+      if (!(data['mentors'].length == 0)){
+        List<Mentor> mentors = parserMentorListFromProject(data['mentors']);
+        projectController.mentors = RxList(mentors);
+      }
+      if (!(data['members'].length == 0)){
+        List<Member> members = parserMembersListFromProject(data['members']);
+        projectController.members = RxList(members);
+      }
+      if (!(data['jobs'].length == 0)){
+        List<Job> jobs = parserJobsListFromProject(data['jobs']);
+        projectController.jobs = RxList(jobs);
+      }
+      if (!(data['applications'].length == 0)){
+        List<Application> applications = parserApplicationsListFromProject(data['applications']);
+        projectController.applications = RxList(applications);
+      }
+      if (!(data['changelogs'].length == 0)){
+        List<Changelog> changelogs = parserChangelogListFromProject(data['changelogs']);
+        projectController.changelogs = RxList(changelogs);
+      }
+      if (!(data['topics'].length == 0)){
+        List<Topic> topics = parserTopicsListFromProject(data['topics']);
+        projectController.topics = RxList(topics);
+      }
+
+      return project;
     } else if (response.statusCode ==404){
       throw Exception('Not found');
     } else{
@@ -117,17 +210,22 @@ class ProjectService{
         if (imageFile != null) {
           // upload image
           final urlImage = urlProject + responseData['data'] + "/logo/";
-          final bytes = await imageFile.readAsBytes();
-          final responseImage = await http.post(
-              Uri.parse(urlImage),
-              body: bytes,
-              headers: headers
+
+          final request = http.MultipartRequest(
+            'POST',
+            Uri.parse(urlImage),
           );
-          if (responseImage.statusCode == 200) {
-            print ("Upload Successful");
-          } else {
-            print('Error Upload Image');
-          }
+
+          final file = await http.MultipartFile.fromPath('imageFile', imageFile.path);
+          request.files.add(file);
+
+          request.headers.addAll({'Authorization': 'Bearer ${await StorageService.getAccessToken()}'});
+
+          final response = await request.send();
+
+          print(response.statusCode);
+
+          // end upload image
         }
       } else {
         print('Error: ${response.reasonPhrase}');
@@ -137,6 +235,18 @@ class ProjectService{
     }
   }
 
+  static Future<List<Project>> fetchOwnerProjectList() async{
+    UserController userController = Get.put(UserController());
+
+    final response = await http.get(Uri.parse(UserService.urlUser +"${userController.id}/projects"));
+    if (response.statusCode ==200){
+      return compute(parserProjectList,response.body);
+    } else if (response.statusCode ==404){
+      throw Exception('Not found');
+    } else{
+      throw Exception('Can\'t get');
+    }
+  }
 
 
 }

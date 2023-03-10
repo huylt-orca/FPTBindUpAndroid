@@ -41,11 +41,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
         itemCount: _messages.length,
           itemBuilder: (context,index){
           RemoteMessage message = _messages[index];
-
         return NotificationCard(
             title: message.notification?.title ?? "",
             description: message.notification?.body ?? "",
-            image: message.notification?.android?.imageUrl.toString() ?? imageDemo,
+            image: message.notification?.android == null ? message.notification!.android!.imageUrl! : imageDemo,
             time: message.sentTime!.toString()
         );
       },

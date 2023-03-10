@@ -2,26 +2,35 @@ import 'package:android/constants.dart';
 import 'package:android/screens/project_detail_screen.dart';
 import 'package:android/widget/ProjectTypeWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../controller/ProjectController.dart';
+import '../models/Project.dart';
+import '../models/ProjectImage.dart';
+import '../services/ProjectService.dart';
 
 class MyProjectCard extends StatelessWidget {
-  final String name;
-  final String description;
-  final String image;
+  final Project project;
   const MyProjectCard(
       { Key? key,
-        required this.name,
-        required this.description,
-        required this.image
+        required this.project
       }) : super(key: key);
-
-  String _getImage(){
-  return this.image != "" ? this.image : imageDefault;
-   }
 
   @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
-      onTap: (){},
+      onTap: ()async{
+        print(this.project.id);
+        await ProjectService.fetchProjectDetail(this.project.id!);
+
+        Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) =>
+                ProjectDetailScreen()
+            )
+        );
+      },
       child: Container(
         margin: EdgeInsets.all(10),
         padding: EdgeInsets.all(5),
@@ -45,7 +54,7 @@ class MyProjectCard extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(5),
                 child: Image.network(
-                  this._getImage() ,
+                  project.logo! ,
                   width: 80,
                   height: 80,
                   fit: BoxFit.cover,
@@ -62,7 +71,7 @@ class MyProjectCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    this.name,
+                    project.name!,
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis ,
@@ -71,7 +80,7 @@ class MyProjectCard extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    this.description,
+                    project.summary!,
                     style: TextStyle(fontSize: 12),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis ,

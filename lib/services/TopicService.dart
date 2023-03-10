@@ -24,8 +24,18 @@ class TopicService{
   }
 
 
-  static Future<List<Topic>> fetchTopicList({int page =0 }) async{
-    final response = await http.get(Uri.parse(urlTopic + "?pageSize=4&sortBy=id&statusType=-1&pageNo=$page"));
+  static Future<List<Topic>> fetchTopicList({
+    int page =0,
+    int pageSize =10,
+    String sortBy = "id",
+  }) async{
+
+    String options =
+        "?pageSize=${pageSize}"
+        "&pageNo=${page}"
+        "&sortBy=${sortBy}"
+    ;
+    final response = await http.get(Uri.parse(urlTopic + options));
     if (response.statusCode ==200){
       return compute(parserTopicList,response.body);
     } else if (response.statusCode ==404){

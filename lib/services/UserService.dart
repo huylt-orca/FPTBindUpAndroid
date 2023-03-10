@@ -74,21 +74,21 @@ class UserService{
     if (mainresponse.statusCode ==200){
       // get User detail
       User mainUser = await compute(parserUserId,mainresponse.body);
-      return mainUser;
-      // final response = await http.get(
-      //     Uri.parse(urlUser + "{id}?id=${mainUser.id}"),
-      //     headers: {
-      //       'Authorization': 'Bearer $accessToken',
-      //     }
-      // );
-      //
-      // if (response.statusCode ==200){
-      //   return compute(parserUserDetail,response.body);
-      // } else if (response.statusCode ==404){
-      //   throw Exception('Not found');
-      // } else{
-      //   throw Exception('Can\'t get');
-      // }
+
+      final response = await http.get(
+          Uri.parse(urlUser + "${mainUser.id}"),
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+          }
+      );
+      print(response.statusCode);
+      if (response.statusCode ==200){
+        return compute(parserUserDetail,response.body);
+      } else if (response.statusCode ==404){
+        throw Exception('Not found');
+      } else{
+        throw Exception('Can\'t get');
+      }
     } else if (mainresponse.statusCode ==404){
       throw Exception('Not found');
     } else{

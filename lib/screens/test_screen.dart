@@ -37,7 +37,8 @@ class _TestScreenState extends State<TestScreen> {
                     child: ListView.builder(
                       itemCount: list.length,
                         itemBuilder: (context,index){
-                          return MyProjectCard(name: list[index], description: "1dk",image: imageDemo,);
+                        return Text("Not user");
+                          // return MyProjectCard(name: list[index], description: "1dk",image: imageDemo,);
                         }),
                   ),
                 ],

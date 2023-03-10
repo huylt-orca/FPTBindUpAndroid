@@ -19,7 +19,7 @@ class ProjectOverviewScreen extends StatelessWidget {
       scrollDirection: Axis.vertical,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        height: 230,
+        height: 300,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,10 +51,24 @@ class ProjectOverviewScreen extends StatelessWidget {
             ),
             SizedBox(height: 10,),
 
-            Text("Jobs", style: TextStyle(fontSize: 20,
-                fontWeight: FontWeight.bold),),
-            Text("- Developer")
-
+            projectController.jobs.length != 0 ?
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Jobs", style: TextStyle(fontSize: 20,
+                      fontWeight: FontWeight.bold,),),
+                  Expanded(
+                      child: ListView.builder(
+                        itemCount: projectController.jobs.length,
+                          itemBuilder: (context,index){
+                            return Text(projectController.jobs[index].name!);
+                          })
+                  ),
+                ],
+              ),
+            )
+            :  SizedBox(height: 0),
           ],
         ),
       ),

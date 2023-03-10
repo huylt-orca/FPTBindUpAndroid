@@ -2,11 +2,15 @@ import 'dart:io';
 
 import 'package:android/constants.dart';
 import 'package:android/models/Project.dart';
+import 'package:android/models/Topic.dart';
 import 'package:android/services/ProjectService.dart';
+import 'package:android/services/TopicService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+
+import '../widget/MultiSelectWidget.dart';
 
 class CreateProjectScreen extends StatefulWidget {
   const CreateProjectScreen({Key? key}) : super(key: key);
@@ -17,8 +21,9 @@ class CreateProjectScreen extends StatefulWidget {
 
 class _CreateProjectScreenState extends State<CreateProjectScreen> {
   File? image;
-  final items = ['Khong','Co','Gi','Het'];
-  String? selectedItem;
+  // final items = ['Khong','Co','Gi','Het'];
+  // String? selectedItem;
+  // List<File> imageProject = List<File>.empty(growable: true);
 
   ProjectService projectService = new ProjectService();
 
@@ -27,14 +32,33 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
   TextEditingController _txtSummary = TextEditingController();
   TextEditingController _txtSource = TextEditingController();
 
-  TextEditingController _txtTopic = TextEditingController();
-  TextEditingController _txtPhone = TextEditingController();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     // selectedItem = items[0];
+  }
+
+  List<Topic> _selectedItems = [];
+
+  void _showMultiSelect() async {
+
+    final List<Topic> items = await TopicService.fetchTopicList();
+
+    final List<Topic>? results = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return MultiSelect(items: items);
+      },
+    );
+
+    // Update UI
+    if (results != null) {
+      setState(() {
+        _selectedItems = results;
+      });
+    }
   }
 
   @override
@@ -101,7 +125,6 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
               Form(
                   child:Column(
                     children: [
-
                       TextFormField(
                         controller: _txtName,
                         decoration: const InputDecoration(
@@ -110,37 +133,41 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      Row(
-                        children: [
-                          Container(
-                            width: 200,
-                            child: DropdownButton(
-                              hint: Text("Topic"),
-                              isExpanded:true,
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.black
-                              ),
-                              items: items.map((String item) {
-                                return DropdownMenuItem<String>(
-                                  value: item,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 10.0),
-                                    child: Text(item),
-                                  ),
-                                );
-                              }).toList(),
-                              value: selectedItem,
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  selectedItem = newValue!;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      )
-                      ,
+
+                      // remove this, not use
+                      // Row(
+                      //   children: [
+                      //     Container(
+                      //       width: 200,
+                      //       child: DropdownButton(
+                      //         hint: Text("Topic"),
+                      //         isExpanded:true,
+                      //         style: TextStyle(
+                      //             fontSize: 18,
+                      //             color: Colors.black
+                      //         ),
+                      //         items: items.map((String item) {
+                      //           return DropdownMenuItem<String>(
+                      //             value: item,
+                      //             child: Padding(
+                      //               padding: const EdgeInsets.only(left: 10.0),
+                      //               child: Text(item),
+                      //             ),
+                      //           );
+                      //         }).toList(),
+                      //         value: selectedItem,
+                      //         onChanged: (String? newValue) {
+                      //           setState(() {
+                      //             selectedItem = newValue!;
+                      //           });
+                      //         },
+                      //       ),
+                      //     ),
+                      //   ],
+                      // )
+                      // ,
+
+
                       const SizedBox(height: 10),
                       TextFormField(
                         controller: _txtSummary,
@@ -167,6 +194,46 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                         ),
                       ),
                       const SizedBox(height: 10,),
+
+                      ElevatedButton(
+                        onPressed: _showMultiSelect,
+                        child: const Text('Select Topic'),
+                      ),
+                      // display selected items
+                      Wrap(
+                        children: _selectedItems
+                            .map((e) => Chip(
+                          label: Text(e.name!),
+                        ))
+                            .toList(),
+                      ),
+                      // const SizedBox(height: 10,),
+                      // ElevatedButton(
+                      //   onPressed: ()async{
+                      //     try{
+                      //       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                      //       if (image == null) return;
+                      //       final imageTemporary = File(image.path);
+                      //       setState(() => this.imageProject.add(imageTemporary));
+                      //     } on PlatformException catch (e){
+                      //       print('Failed to pick image $e');
+                      //     }
+                      //   },
+                      //   child: Text('Add Image'),
+                      // ),
+                      // const SizedBox(height: 10,),
+                      // Expanded(child: ListView.builder(
+                      //     itemCount: imageProject.length,
+                      //     scrollDirection: Axis.horizontal,
+                      //     itemBuilder: (context,index){
+                      //       return Container(
+                      //         padding: EdgeInsets.all(8),
+                      //         child: Image.file(imageProject[index]),
+                      //       );
+                      //     },
+                      //
+                      // )),
+                      const SizedBox(height: 10,),
                       SizedBox(
                         width: 200,
                         child: ElevatedButton(
@@ -184,7 +251,7 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                           style: ElevatedButton.styleFrom(
                               side: BorderSide.none, shape: const StadiumBorder()
                           ),
-                          child: const Text ("Edit",style: TextStyle(
+                          child: const Text ("Create",style: TextStyle(
                               color: Colors.white,
                               fontSize: 20,
                               fontWeight: FontWeight.bold

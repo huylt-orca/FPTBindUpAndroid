@@ -2,12 +2,10 @@ import 'package:android/controller/ProjectController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../controller/UserController.dart';
+
 class ProjectMilestonesScreen extends StatefulWidget {
-  final bool isOwner = true;
-  const ProjectMilestonesScreen({
-    Key? key,
-    isOwner,
-  }) : super(key: key);
+  const ProjectMilestonesScreen({Key? key}) : super(key: key);
 
   @override
   State<ProjectMilestonesScreen> createState() =>
@@ -16,7 +14,16 @@ class ProjectMilestonesScreen extends StatefulWidget {
 
 class _ProjectMilestonesScreenState extends State<ProjectMilestonesScreen> {
   final ProjectController projectController = Get.put(ProjectController());
+  final UserController userController = Get.put(UserController());
   int _currentStep = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _currentStep = projectController.milestone.value;
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -42,14 +49,14 @@ class _ProjectMilestonesScreenState extends State<ProjectMilestonesScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Visibility(
-                  visible: widget.isOwner,
+                  visible: userController.id.value == projectController.founder.value.id,
                   child: TextButton(
                     onPressed: dtl.onStepCancel,
                     child: Text('CANCEL'),
                   ),
                 ),
                 Visibility(
-                  visible: widget.isOwner,
+                  visible: userController.id.value == projectController.founder.value.id,
                   child: TextButton(
                     onPressed: dtl.onStepContinue,
                     child: Text('NEXT'),

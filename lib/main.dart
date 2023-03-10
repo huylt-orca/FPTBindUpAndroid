@@ -5,6 +5,7 @@ import 'package:android/controller/UserController.dart';
 import 'package:android/screens/bottom_bar.dart';
 import 'package:android/screens/login_screen.dart';
 import 'package:android/screens/project_detail_screen.dart';
+import 'package:android/screens/signup_screen.dart';
 import 'package:android/screens/test_screen.dart';
 import 'package:android/services/StorageService.dart';
 import 'package:android/services/UserService.dart';
@@ -77,6 +78,7 @@ class MyApp extends StatelessWidget {
       home: const BottomBar(),
       // home: const LoginScreen()
       // home: const TestScreen(),
+      // home: const SignUpScreen(),
     );
   }
 }

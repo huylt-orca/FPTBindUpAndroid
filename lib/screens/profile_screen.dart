@@ -1,7 +1,7 @@
+import 'package:android/constants.dart';
 import 'package:android/screens/update_profile_screen.dart';
 import 'package:android/screens/user_application_screen.dart';
 import 'package:android/screens/user_change_password_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
@@ -20,10 +20,10 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   String _message="";
-
+  UserController userController = Get.put(UserController());
   @override
   Widget build(BuildContext context) {
-    UserController userController = Get.put(UserController());
+
 
     if (userController.id.isEmpty){
       return Center(
@@ -54,20 +54,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
             height: 120,
             child:  ClipRRect(
               borderRadius: BorderRadius.circular(100),
-              child: const Image(fit: BoxFit.fitHeight,
-                  image: AssetImage("assets/images/profileavatar.jpg",
+              child:
+              userController.avatar == "" ?
+              const Image(fit: BoxFit.fitHeight,
+                  image: NetworkImage(imageDemo),
                   )
-              ),
+              :  Image( fit:  BoxFit.fitHeight,
+                  image: NetworkImage(userController.avatar.value)
+              )
+              ,
             ),
           ),
           const SizedBox(height: 10,),
-          Text("Luu Thanh Huy",
+          Text(userController.name.value,
             style: TextStyle(
                 fontSize: 20,
               fontWeight: FontWeight.bold
             ),
           ),
-          Text("Developer",
+          Text(userController.headline.value,
             style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500

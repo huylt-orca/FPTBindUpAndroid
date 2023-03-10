@@ -21,15 +21,11 @@ class ProjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ProjectController projectController = Get.put(ProjectController());
+
     return GestureDetector(
       onTap: ()async{
         print(this.project.id);
-        Project projectDetail = await ProjectService.fetchProjectDetail(this.project.id!);
-
-        projectController.AddProject(projectDetail);
-        List<ProjectImage> images = await ProjectService.fetchProjectImageList(this.project.id!);
-        projectController.AddListImage(images);
+        await ProjectService.fetchProjectDetail(this.project.id!);
 
         Navigator.push(
           context,
@@ -116,11 +112,11 @@ class ProjectCard extends StatelessWidget {
                 top: 25  ,
                 child: ElevatedButton(
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.grey) ,
+                    backgroundColor: MaterialStateProperty.all(Colors.blue) ,
+                      padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 5))
                   ),
                   onPressed: () {  },
                   child: Column(
-
                     children: [
                       Icon(Icons.arrow_drop_up),
                       Text(this.project.voteQuantity.toString())

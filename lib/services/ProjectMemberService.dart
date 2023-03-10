@@ -20,13 +20,25 @@ class ProjectMemberService{
   static Member parserMemberDetail(String responseBody){
     var data = json.decode(responseBody) ;
     var memberJson = data['data'] ;
-    Member topic =  Member.fromJson(memberJson);
-    return topic;
+    Member member =  Member.fromJson(memberJson);
+    return member;
   }
 
 
-  static Future<List<Member>> fetchMemberList({int page =0 }) async{
-    final response = await http.get(Uri.parse(urlMember + "?pageSize=4&sortBy=id&statusType=-1&pageNo=$page"));
+  static Future<List<Member>> fetchMemberList({
+    int page =0,
+    int pageSize =4,
+    bool paging = false,
+    required String projectId
+  }) async{
+
+    String options =
+        "?pageSize=${pageSize}"
+        "&pageNo=${page}"
+        "&paging=${paging}"
+        "&projectId=${projectId}"
+    ;
+    final response = await http.get(Uri.parse(urlMember + options));
     if (response.statusCode ==200){
       return compute(parserMemberList,response.body);
     } else if (response.statusCode ==404){

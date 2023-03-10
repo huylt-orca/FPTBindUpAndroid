@@ -1,8 +1,11 @@
 import 'package:android/constants.dart';
 import 'package:android/models/responsetest.dart';
 import 'package:android/screens/project_create_screen.dart';
+import 'package:android/services/ProjectService.dart';
 import 'package:android/widget/MyProjectCard.dart';
 import 'package:flutter/material.dart';
+
+import '../models/Project.dart';
 
 class MyProjectWidget extends StatefulWidget {
   final bool isOwner ;
@@ -13,15 +16,22 @@ class MyProjectWidget extends StatefulWidget {
 }
 
 class _MyProjectWidgetState extends State<MyProjectWidget> {
-  List<ResponseTest> list = List<ResponseTest>.empty(growable: true);
+  List<Project> list = List<Project>.empty(growable: true);
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    setState(() {
-      list = listTest;
-    });
+    if (this.widget.isOwner){
+      ProjectService.fetchOwnerProjectList().then(
+              (data) {
+              setState(() {
+                list = data;
+              });});
+    } else{
+      
+    }
+
   }
 
   @override
@@ -52,15 +62,12 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
               )
             ],
           ),
+          list.isEmpty ? Center(child:Text("No Project, Create")) :
           Expanded(
             child: ListView.builder(
                 itemCount: list.length,
                 itemBuilder: (context, index){
-                  return MyProjectCard(
-                      name: list[index].title!,
-                      description: list[index].description!,
-                      image: list[index].link!
-                  );
+                  return MyProjectCard(project: list[index],);
                   // return Text(list[index].title!);
                 },
 
