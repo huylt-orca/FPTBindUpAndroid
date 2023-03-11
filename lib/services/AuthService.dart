@@ -14,6 +14,7 @@ class AuthService{
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final UserController userController = Get.put(UserController());
   static final String urlAuth = server + "auth/";
+  static final String urlAccount = server + "account/";
 
 
    Future<String> signInWithEmailAndPassword(String email, String password) async {
@@ -33,6 +34,7 @@ class AuthService{
 
       if (response.statusCode == 200) {
         var responseData = jsonDecode(response.body);
+        await AuthService.sendToken();
         print("Access Token: " + responseData['token']);
         return responseData['token'];
       } else {
@@ -81,6 +83,7 @@ class AuthService{
     if (response.statusCode == 200) {
       final responseData = jsonDecode(response.body);
       StorageService.saveAccessToken(responseData['token']);
+
     } else {
     print('Error: ${response.reasonPhrase}');
     }
@@ -134,6 +137,34 @@ class AuthService{
     userController.RemoveUser();
   }
 
+
+  static Future<void> sendToken() async {
+     UserController userController = Get.put(UserController());
+    final uri = Uri.parse(urlAccount + "${await StorageService.getDeviceToken()}");
+    String body = "${userController.id.value}";
+    print(userController.id.value);
+    var headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${await StorageService.getAccessToken()}',
+    };
+
+
+    try {
+      var response = await http.post(uri, body: body, headers: headers);
+      print ("Server:   ${response.statusCode}");
+      if (response.statusCode == 200) {
+
+      } else {
+
+        print('Error: ${response.reasonPhrase}');
+      }
+    } catch (error) {
+      // Xử lý lỗi khi không kết nối được đến API
+      print('Error: $error');
+    }
+
+  }
 
 
 

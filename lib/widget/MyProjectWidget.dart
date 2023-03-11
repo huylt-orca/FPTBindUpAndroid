@@ -62,7 +62,7 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
               )
             ],
           ),
-          list.isEmpty ? Center(child:Text("No Project, Create")) :
+          list.isEmpty ? Center(child:Text("No Project")) :
           Expanded(
             child: ListView.builder(
                 itemCount: list.length,

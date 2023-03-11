@@ -134,39 +134,6 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                       ),
                       const SizedBox(height: 10),
 
-                      // remove this, not use
-                      // Row(
-                      //   children: [
-                      //     Container(
-                      //       width: 200,
-                      //       child: DropdownButton(
-                      //         hint: Text("Topic"),
-                      //         isExpanded:true,
-                      //         style: TextStyle(
-                      //             fontSize: 18,
-                      //             color: Colors.black
-                      //         ),
-                      //         items: items.map((String item) {
-                      //           return DropdownMenuItem<String>(
-                      //             value: item,
-                      //             child: Padding(
-                      //               padding: const EdgeInsets.only(left: 10.0),
-                      //               child: Text(item),
-                      //             ),
-                      //           );
-                      //         }).toList(),
-                      //         value: selectedItem,
-                      //         onChanged: (String? newValue) {
-                      //           setState(() {
-                      //             selectedItem = newValue!;
-                      //           });
-                      //         },
-                      //       ),
-                      //     ),
-                      //   ],
-                      // )
-                      // ,
-
 
                       const SizedBox(height: 10),
                       TextFormField(
@@ -195,18 +162,20 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                       ),
                       const SizedBox(height: 10,),
 
-                      ElevatedButton(
-                        onPressed: _showMultiSelect,
-                        child: const Text('Select Topic'),
-                      ),
-                      // display selected items
-                      Wrap(
-                        children: _selectedItems
-                            .map((e) => Chip(
-                          label: Text(e.name!),
-                        ))
-                            .toList(),
-                      ),
+                      // ElevatedButton(
+                      //   onPressed: _showMultiSelect,
+                      //   child: const Text('Select Topic'),
+                      // ),
+                      // // display selected items
+                      // Wrap(
+                      //   children: _selectedItems
+                      //       .map((e) => Chip(
+                      //     label: Text(e.name!),
+                      //   ))
+                      //       .toList(),
+                      // ),
+
+
                       // const SizedBox(height: 10,),
                       // ElevatedButton(
                       //   onPressed: ()async{

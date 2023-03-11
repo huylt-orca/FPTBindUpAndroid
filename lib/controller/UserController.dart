@@ -11,6 +11,7 @@ class UserController extends GetxController{
   RxString phone = "".obs;
   RxString email = "".obs;
   RxString avatar = "".obs;
+  RxString address = "".obs;
 
   void AddUser(User user){
     this.id = RxString(user.id!);
@@ -22,6 +23,7 @@ class UserController extends GetxController{
     this.phone = RxString(user.phone!) ;
     this.email = RxString(user.email!);
     this.avatar = RxString(user.avatar!);
+    this.address = RxString(user.address!);
   }
   
   void RemoveUser(){

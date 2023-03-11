@@ -248,5 +248,45 @@ class ProjectService{
     }
   }
 
+  static Future<void> putProject(Project project) async {
+
+    String options =
+        "?id=${project.id}"
+        "&name=${project.name}"
+        "&summary=${project.summary}"
+        "&description=${project.description}"
+        "&source=${project.source}"
+        "&milestone=${project.milestone}"
+    ;
+
+    var uri = Uri.parse(urlProject + options);
+
+    // var body = jsonEncode({
+    //   'id': project.id,
+    //   'name': project.name,
+    //   'summary': project.summary,
+    //   'description': project.description,
+    //   'source': project.source,
+    //   'milestone': project.milestone,
+    // });
+    var headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${await StorageService.getAccessToken()}'
+    };
+    try {
+      var response = await http.put(uri, body: null, headers: headers);
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        print("Success Update Project");
+
+      } else {
+        print('Error: ${response.reasonPhrase}');
+      }
+    } catch (error) {
+      print('Error: $error');
+    }
+  }
+
 
 }

@@ -30,7 +30,8 @@ MaterialColor mCustomMainColor = MaterialColor(
 
 const kDefaultPadding = 20.0;
 
-const imageDemo = "https://static.wikia.nocookie.net/leagueoflegends/images/0/04/Chibi_Ahri_Base_Tier_1.png/revision/latest?cb=20230208203819";
+// const imageDemo = "https://static.wikia.nocookie.net/leagueoflegends/images/0/04/Chibi_Ahri_Base_Tier_1.png/revision/latest?cb=20230208203819";
+const imageDemo = "https://cdn.pixabay.com/photo/2012/04/26/19/43/profile-42914_1280.png";
 
 const List<String> imageUrlsDemo = [
   imageDemo,imageDemo,imageDemo,imageDemo,imageDemo,imageDemo,imageDemo,imageDemo,

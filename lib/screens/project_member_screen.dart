@@ -24,9 +24,9 @@ class _ProjectMemberScreenState extends State<ProjectMemberScreen> {
     // TODO: implement initState
     super.initState();
     members.add(new Member(
-        id: userController.id.value,
-        name: userController.name.value,
-        title: userController.avatar.value ,
+        id: projectController.founder.value.id,
+        name: projectController.founder.value.name,
+        title: projectController.founder.value.avatar ,
         role:  "Leader"
     ));
     projectController.mentors.forEach((mentor) {
@@ -37,6 +37,15 @@ class _ProjectMemberScreenState extends State<ProjectMemberScreen> {
           role: "Mentor"
       ));
     });
+    projectController.members.forEach((member) {
+      members.add(new Member(
+          id: member.id,
+          title: imageDemo,
+          name: member.name,
+          role: member.role
+      ));
+    });
+
     members.addAll(projectController.members);
 
   }
@@ -52,7 +61,8 @@ class _ProjectMemberScreenState extends State<ProjectMemberScreen> {
               child: ListView.builder(
                 itemCount: members.length,
                   itemBuilder: (context,index){
-                    return ProjectMemberCard(name: members[index].name!, description: members[index].role!, image: members[index].title!);
+                  String? tmpImage = members[index].title == "" ? imageDemo :members[index].title;
+                    return ProjectMemberCard(name: members[index].name!, description: members[index].role!, image: tmpImage!);
                   }
               ),
             ),

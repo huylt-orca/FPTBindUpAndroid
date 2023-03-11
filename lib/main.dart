@@ -7,6 +7,7 @@ import 'package:android/screens/login_screen.dart';
 import 'package:android/screens/project_detail_screen.dart';
 import 'package:android/screens/signup_screen.dart';
 import 'package:android/screens/test_screen.dart';
+import 'package:android/services/AuthService.dart';
 import 'package:android/services/StorageService.dart';
 import 'package:android/services/UserService.dart';
 import 'package:flutter/material.dart';
@@ -30,12 +31,15 @@ Future<void> main() async {
   String token = await getToken();
   print('Token Device: $token}');
 
+  await StorageService.saveDeviceToken(token);
+
   String? accessToken = await StorageService.getAccessToken();
   if (accessToken != null && !accessToken.isEmpty){
     try {
       User user = await UserService.fetchUserDetail();
       final UserController userController = Get.put(UserController());
       userController.AddUser(user);
+      // await AuthService.sendToken();
     } catch(error){
       print('Access Token: $accessToken}');
       print(error);

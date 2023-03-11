@@ -1,9 +1,37 @@
 import 'package:android/constants.dart';
+import 'package:android/controller/UserController.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
-class UpdateProfileScreen extends StatelessWidget {
+class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({Key? key}) : super(key: key);
+
+  @override
+  State<UpdateProfileScreen> createState() => _UpdateProfileScreenState();
+}
+
+class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
+  UserController userController = Get.put(UserController());
+  TextEditingController _txtFullName = TextEditingController();
+  TextEditingController _txtEmail = TextEditingController();
+  TextEditingController _txtAddress = TextEditingController();
+  TextEditingController _txtHeadline = TextEditingController();
+  TextEditingController _txtPhone = TextEditingController();
+  int _gender = 0;
+
+  List<String> genders = ["Male", "FeMale"];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _txtFullName = TextEditingController(text: userController.name.value);
+    _txtEmail = TextEditingController(text: userController.email.value);
+    _txtAddress = TextEditingController(text: userController.address.value);
+    _txtHeadline = TextEditingController(text: userController.headline.value);
+    _txtPhone = TextEditingController(text: userController.phone.value);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +57,10 @@ class UpdateProfileScreen extends StatelessWidget {
                     height: 120,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
-                      child: const Image(image: AssetImage("assets/images/profileavatar.jpg"
-                      )),
+                      child:
+                      userController.avatar.value == "" ?
+                        Image.network(userController.avatar.value) :
+                        Image.network(imageDemo),
                     ),
                   ),
                   Positioned(
@@ -57,6 +87,7 @@ class UpdateProfileScreen extends StatelessWidget {
                   child:Column(
                     children: [
                       TextFormField(
+                        controller: _txtFullName,
                         decoration: const InputDecoration(
                           label: Text("Fullname"),
                           prefixIcon: Icon(LineAwesomeIcons.male)
@@ -64,6 +95,7 @@ class UpdateProfileScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
                       TextFormField(
+                        controller: _txtEmail,
                         decoration: const InputDecoration(
                             label: Text("Email"),
                             prefixIcon: Icon(LineAwesomeIcons.envelope)
@@ -71,20 +103,38 @@ class UpdateProfileScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
                       TextFormField(
+                        controller: _txtAddress,
                         decoration: const InputDecoration(
                             label: Text("Address"),
                             prefixIcon: Icon(LineAwesomeIcons.map)
                         ),
                       ),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                            label: Text("Gender"),
-                            prefixIcon: Icon(LineAwesomeIcons.genderless)
+                      const SizedBox(height: 20),
+                      DropdownButtonFormField<String>(
+                        value: genders[_gender],
+                        items: genders.map((String gender) {
+                          return DropdownMenuItem<String>(
+                            value: gender,
+                            child: Text(gender),
+                          );
+                        }).toList(),
+                        onChanged: (String? value){
+                          if (value =="Female"){
+                            this._gender = 1;
+                          }
+                          if (value == "Male"){
+                            this._gender = 0;
+                          }
+                        },
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.only(left: 20),
+                          labelText: 'Gender',
                         ),
                       ),
+
                       const SizedBox(height: 10),
                       TextFormField(
+                        controller: _txtHeadline,
                         decoration: const InputDecoration(
                             label: Text("Headline"),
                             prefixIcon: Icon(LineAwesomeIcons.book)
@@ -92,6 +142,7 @@ class UpdateProfileScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
                       TextFormField(
+                        controller: _txtPhone,
                         decoration: const InputDecoration(
                             label: Text("Phone"),
                             prefixIcon: Icon(LineAwesomeIcons.phone)

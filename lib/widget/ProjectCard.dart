@@ -16,7 +16,7 @@ class ProjectCard extends StatelessWidget {
       }) : super(key: key);
 
   String? _getImage(){
-    return this.project.logo != "" ? this.project.logo : imageDefault;
+    return this.project.logo!.isEmpty ? imageDemo : this.project.logo  ;
   }
 
   @override
@@ -60,7 +60,7 @@ class ProjectCard extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Image.network(
-                      this._getImage()!,
+                      _getImage()!,
                       width: 80,
                       height: 80,
                       fit: BoxFit.cover,

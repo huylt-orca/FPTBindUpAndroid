@@ -1,8 +1,10 @@
 import 'package:android/controller/ProjectController.dart';
+import 'package:android/services/ProjectService.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controller/UserController.dart';
+import '../models/Project.dart';
 
 class ProjectMilestonesScreen extends StatefulWidget {
   const ProjectMilestonesScreen({Key? key}) : super(key: key);
@@ -34,10 +36,38 @@ class _ProjectMilestonesScreenState extends State<ProjectMilestonesScreen> {
         child:  Stepper(
             currentStep: _currentStep,
           onStepContinue: () {
+            if (_currentStep <3){
+              setState(() {
+                _currentStep++;
+              });
 
+              ProjectService.putProject(new Project(
+                name: projectController.name.value,
+                id: projectController.id.value,
+                description: projectController.description.value,
+                source: projectController.source.value,
+                summary: projectController.source.value,
+                milestone: projectController.milestone.value + 1,
+              ));
+              projectController.milestone.value++;
+            }
           },
           onStepCancel: () {
+            if (_currentStep >0){
+              setState(() {
+                _currentStep--;
+              });
 
+              ProjectService.putProject(new Project(
+                name: projectController.name.value,
+                id: projectController.id.value,
+                description: projectController.description.value,
+                source: projectController.source.value,
+                summary: projectController.source.value,
+                milestone: projectController.milestone.value - 1,
+              ));
+              projectController.milestone.value--;
+            }
           },
             onStepTapped: (int value ){
               setState(() {
@@ -49,14 +79,14 @@ class _ProjectMilestonesScreenState extends State<ProjectMilestonesScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Visibility(
-                  visible: userController.id.value == projectController.founder.value.id,
+                  visible: !(userController.id.value == projectController.founder.value.id && _currentStep == 0),
                   child: TextButton(
                     onPressed: dtl.onStepCancel,
-                    child: Text('CANCEL'),
+                    child: Text('BACK'),
                   ),
                 ),
                 Visibility(
-                  visible: userController.id.value == projectController.founder.value.id,
+                  visible: !(userController.id.value == projectController.founder.value.id && _currentStep == 3),
                   child: TextButton(
                     onPressed: dtl.onStepContinue,
                     child: Text('NEXT'),
@@ -74,7 +104,7 @@ class _ProjectMilestonesScreenState extends State<ProjectMilestonesScreen> {
               ),
               Step(
                 title: Text('Upcoming'),
-                content: Text('Tìm kiếm tài năng gánh team'),
+                content: Text('Tìm kiếm tài năng'),
                   isActive: projectController.milestone.value >=1,
                   state: projectController.milestone.value >=1 ? StepState.complete :StepState.indexed
               ),
@@ -85,8 +115,8 @@ class _ProjectMilestonesScreenState extends State<ProjectMilestonesScreen> {
                   state: projectController.milestone.value >=2 ? StepState.complete :StepState.indexed
               ),
               Step(
-                title: Text('Finishing'),
-                content: Text('Hết tiền, phá sản, nghỉ'),
+                title: Text('Finished'),
+                content: Text('Finished'),
                   isActive: projectController.milestone.value >=3,
                   state: projectController.milestone.value >=3 ? StepState.complete :StepState.indexed
               )

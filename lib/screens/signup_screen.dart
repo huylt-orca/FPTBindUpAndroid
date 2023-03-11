@@ -24,7 +24,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController _txtPhone = TextEditingController();
   int _gender = 0;
   AuthService authService = new AuthService();
-  List<String> genders = ["Female", "Male"];
+  List<String> genders = ["Male", "Female"];
   @override
   Widget build(BuildContext context) {
 
@@ -100,10 +100,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             }).toList(),
                            onChanged: (String? value){
                               if (value =="Female"){
-                                this._gender = 0;
+                                this._gender = 1;
                               }
                               if (value == "Male"){
-                                this._gender = 1;
+                                this._gender = 0;
                               }
                            },
                             decoration: InputDecoration(
