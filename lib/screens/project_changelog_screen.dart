@@ -1,7 +1,10 @@
 import 'package:android/controller/ProjectController.dart';
+import 'package:android/services/ChangeLogService.dart';
 import 'package:android/widget/ChangeLogCard.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../models/Changelog.dart';
 
 class ProjectChangelogScreen extends StatefulWidget {
   const ProjectChangelogScreen({Key? key}) : super(key: key);
@@ -12,6 +15,23 @@ class ProjectChangelogScreen extends StatefulWidget {
 
 class _ProjectChangelogScreenState extends State<ProjectChangelogScreen> {
   ProjectController projectController = Get.put(ProjectController());
+  final scrollController = ScrollController();
+  List<Changelog> changelogs = List<Changelog>.empty(growable: true);
+  int page =0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    scrollController.addListener(_scrollListener);
+    ChangelogService.fetchChangelogList(projectId: projectController.id.value).then(
+            (data)  {
+              setState(() {
+                changelogs = data;
+              });
+            }
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,16 +39,16 @@ class _ProjectChangelogScreenState extends State<ProjectChangelogScreen> {
       height: 300,
       child: Column(
         children: [
-          projectController.changelogs.length == 0 ?
+          changelogs == 0 ?
               Center(child: Text('No Changelog'),) :
           Expanded(
               child: ListView.builder(
-                itemCount: projectController.changelogs.length,
+                itemCount: changelogs.length,
                   itemBuilder: (context,index){
                   return ChangeLogCard(
-                    title: projectController.changelogs[index].title!,
-                    description: projectController.changelogs[index].description!,
-                    time: projectController.changelogs[index].createdDate!,
+                    title: changelogs[index].title!,
+                    description: changelogs[index].description!,
+                    time: changelogs[index].createdDate!,
                   );
                   }
               )
@@ -37,4 +57,16 @@ class _ProjectChangelogScreenState extends State<ProjectChangelogScreen> {
       ),
     );
   }
+
+  void _scrollListener(){
+    if (scrollController.position.pixels == scrollController.position.maxScrollExtent){
+      this.page++;
+      ChangelogService.fetchChangelogList(projectId: projectController.id.value,page: this.page).then((data){
+        setState(() {
+          changelogs.addAll(data);
+        });
+      });
+    }
+  }
+
 }

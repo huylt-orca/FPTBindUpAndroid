@@ -11,7 +11,7 @@ class ChangelogService{
 
   static List<Changelog> parserChangelogList(String responseBody){
     var data = json.decode(responseBody) ;
-    var list = data['data']['changelogDTOList'] as List<dynamic>;
+    var list = data['data'] as List<dynamic>;
     List<Changelog> changelogs = list.map((model) => Changelog.fromJson(model)).toList();
     return changelogs;
   }
