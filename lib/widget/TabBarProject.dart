@@ -52,7 +52,7 @@ class _TabBarProjectState extends State<TabBarProject> {
                     buildTab(index),
             ),
           ),
-          SizedBox(height: 20,),
+          SizedBox(height: 10,),
           Container(
             child: _widgetOptions[selectedIndex],
           )

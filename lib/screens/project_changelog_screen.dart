@@ -37,8 +37,25 @@ class _ProjectChangelogScreenState extends State<ProjectChangelogScreen> {
   Widget build(BuildContext context) {
     return Container(
       height: 300,
+      padding: EdgeInsets.symmetric(horizontal: 5),
       child: Column(
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ElevatedButton(
+                  onPressed: (){},
+                  child: Text('Apply Job' ,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold
+                    ),
+                  )
+              )
+            ],
+          ),
+
           changelogs == 0 ?
               Center(child: Text('No Changelog'),) :
           Expanded(

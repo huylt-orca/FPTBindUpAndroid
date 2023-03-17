@@ -160,20 +160,40 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                             prefixIcon: Icon(LineAwesomeIcons.book)
                         ),
                       ),
-                      const SizedBox(height: 10,),
+                      const SizedBox(height: 20,),
 
-                      // ElevatedButton(
-                      //   onPressed: _showMultiSelect,
-                      //   child: const Text('Select Topic'),
-                      // ),
-                      // // display selected items
-                      // Wrap(
-                      //   children: _selectedItems
-                      //       .map((e) => Chip(
-                      //     label: Text(e.name!),
-                      //   ))
-                      //       .toList(),
-                      // ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: 40,
+                        child: ElevatedButton(
+                          onPressed: _showMultiSelect,
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                          ),
+                          child:  Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Icon(LineAwesomeIcons.accusoft,color: Colors.grey),
+                              const SizedBox(width: 10,),
+                              Text('Select Topic',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w400
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      // display selected items
+                      Wrap(
+                        children: _selectedItems
+                            .map((e) => Chip(
+                          label: Text(e.name!),
+                        ))
+                            .toList(),
+                      ),
 
 
                       // const SizedBox(height: 10,),
@@ -214,7 +234,7 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                               description: _txtDescription.text,
                               source: _txtSource.text
                             );
-                             ProjectService.postProject(project, this.image);
+                             ProjectService.postProject(project, this.image,this._selectedItems);
                              Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(

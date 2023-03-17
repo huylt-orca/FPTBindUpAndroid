@@ -56,8 +56,22 @@ class ProjectOverviewScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Jobs", style: TextStyle(fontSize: 20,
-                      fontWeight: FontWeight.bold,),),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Jobs", style: TextStyle(fontSize: 20,
+                          fontWeight: FontWeight.bold,),),
+                      ElevatedButton(
+                          onPressed: (){},
+                          child: Text('Apply Job' ,
+                            style: TextStyle(
+                                color: Colors.white,
+                              fontWeight: FontWeight.bold
+                            ),
+                          )
+                      )
+                    ],
+                  ),
                   Expanded(
                       child: ListView.builder(
                         itemCount: projectController.jobs.length,

@@ -18,8 +18,24 @@ class _ProjectApplicationScreenState extends State<ProjectApplicationScreen> {
   Widget build(BuildContext context) {
     return Container(
       height: 300,
+      padding: EdgeInsets.symmetric(horizontal: 5),
       child: Column(
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ElevatedButton(
+                  onPressed: (){},
+                  child: Text('Add Job' ,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold
+                    ),
+                  )
+              )
+            ],
+          ),
+
           projectController.applications.length == 0 ?
               Center(child: Text('No Applications'),) :
           Expanded(

@@ -181,7 +181,7 @@ class ProjectService{
   }
 
 
-  static Future<void> postProject(Project project,File? imageFile) async {
+  static Future<void> postProject(Project project,File? imageFile,List<Topic> topics) async {
     UserController userController = Get.put(UserController());
 
     var uri = Uri.parse(urlProject);
@@ -227,12 +227,43 @@ class ProjectService{
 
           // end upload image
         }
+
+        if (!topics.isEmpty){
+          // Add topic
+          await postTopicToProject(responseData['data'], topics);
+        }
       } else {
         print('Error: ${response.reasonPhrase}');
       }
     } catch (error) {
       print('Error: $error');
     }
+  }
+
+  static Future<void> postTopicToProject(String projectId,List<Topic> topics) async{
+
+    var headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${await StorageService.getAccessToken()}'
+    };
+
+    var uri = Uri.parse(urlProject + projectId +"/topic");
+    List<String> topicId = [];
+    topics.forEach((topic) => topicId.add(topic.id!));
+    final body = json.encode(topicId);
+    try {
+      final response = await http.post(uri,body: body,headers: headers);
+      if (response.statusCode == 200){
+        print('Add Topic to Product Successful');
+      } else{
+        print('Error: ${response.reasonPhrase}');
+      }
+    } catch (error){
+      print('print $error');
+    }
+
+
   }
 
   static Future<List<Project>> fetchOwnerProjectList() async{

@@ -55,8 +55,35 @@ class _ProjectMemberScreenState extends State<ProjectMemberScreen> {
 
     return Container(
       height: 300,
+        padding: EdgeInsets.symmetric(horizontal: 5),
         child: Column(
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ElevatedButton(
+                    onPressed: (){},
+                    child: Text('Add Mentor' ,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold
+                      ),
+                    )
+                ),
+                const SizedBox(width: 10,),
+                ElevatedButton(
+                    onPressed: (){},
+                    child: Text('Add Member' ,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold
+                      ),
+                    )
+                )
+              ],
+            ),
             Expanded(
               child: ListView.builder(
                 itemCount: members.length,
