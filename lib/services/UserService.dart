@@ -94,7 +94,6 @@ class UserService{
     } else{
       throw Exception('Can\'t get');
     }
-
   }
 
 

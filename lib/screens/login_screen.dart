@@ -109,8 +109,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                         final UserController userController = Get.put(UserController());
 
                                         userController.AddUser(user);
-                                        // print('Send token');
-                                        // await AuthService.sendToken();
+                                        print('Send token');
+                                        await AuthService.sendToken();
 
                                         Navigator.pop(context);
 

@@ -141,7 +141,7 @@ class AuthService{
   static Future<void> sendToken() async {
      UserController userController = Get.put(UserController());
     final uri = Uri.parse(urlAccount + "${await StorageService.getDeviceToken()}");
-    String body = "${userController.id.value}";
+
     print(userController.id.value);
     var headers = {
       'Content-type': 'application/json',
@@ -151,7 +151,7 @@ class AuthService{
 
 
     try {
-      var response = await http.post(uri, body: body, headers: headers);
+      var response = await http.post(uri, headers: headers);
       print ("Server:   ${response.statusCode}");
       if (response.statusCode == 200) {
 

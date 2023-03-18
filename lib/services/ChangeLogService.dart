@@ -1,10 +1,14 @@
 import 'dart:convert';
 
+import 'package:android/controller/ProjectController.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
 
 import '../constants.dart';
 import '../models/Changelog.dart';
 import 'package:http/http.dart' as http;
+
+import 'StorageService.dart';
 
 class ChangelogService{
   static const String urlChangelog = server + "changelog/";
@@ -38,6 +42,7 @@ class ChangelogService{
         "&projectId=${projectId}"
     ;
     final response = await http.get(Uri.parse(urlChangelog + options));
+    print(response.statusCode);
     if (response.statusCode ==200){
       return compute(parserChangelogList,response.body);
     } else if (response.statusCode ==404){
@@ -56,6 +61,34 @@ class ChangelogService{
     } else{
       throw Exception('Can\'t get');
     }
+  }
+
+  static Future<void> postChangelog(String description, String title)async {
+    ProjectController projectController = Get.put(ProjectController());
+    final uri = Uri.parse(urlChangelog);
+    final body = jsonEncode({
+      'projectId': projectController.id.value,
+      'title': title,
+      'description': description
+    });
+
+    var headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${await StorageService.getAccessToken()}'
+    };
+
+    try {
+      final response = await http.post(uri,body: body,headers: headers);
+      if (response.statusCode == 200){
+        print('Create Changelog Successful');
+      } else{
+        print('Error: ${response.reasonPhrase}');
+      }
+    } catch (error){
+      print('print $error');
+    }
+
   }
 
 

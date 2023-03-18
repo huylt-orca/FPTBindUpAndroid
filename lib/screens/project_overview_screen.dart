@@ -50,7 +50,7 @@ class ProjectOverviewScreen extends StatelessWidget {
             Html(
                 data: projectController.description.value
             ),
-            SizedBox(height: 10,),
+            // SizedBox(height: 10,),
 
             // projectController.jobs.length != 0 ?
             Expanded(
@@ -71,7 +71,7 @@ class ProjectOverviewScreen extends StatelessWidget {
                               },
                             );
                           },
-                          child: Text('Apply Job' ,
+                          child: Text('Apply' ,
                             style: TextStyle(
                               fontSize: 12,
                                 color: Colors.white,

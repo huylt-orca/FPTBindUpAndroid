@@ -1,5 +1,7 @@
 import 'package:android/constants.dart';
 import 'package:android/controller/UserController.dart';
+import 'package:android/widget/PopupAddMember.dart';
+import 'package:android/widget/PopupAddMentor.dart';
 import 'package:android/widget/ProjectMemberCard.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -62,8 +64,15 @@ class _ProjectMemberScreenState extends State<ProjectMemberScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton(
-                    onPressed: (){},
-                    child: Text('Add Mentor' ,
+                    onPressed: (){
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return  PopupAddMentor();
+                        },
+                      );
+                    },
+                    child: Text('Mentor' ,
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 12,
@@ -73,8 +82,15 @@ class _ProjectMemberScreenState extends State<ProjectMemberScreen> {
                 ),
                 const SizedBox(width: 10,),
                 ElevatedButton(
-                    onPressed: (){},
-                    child: Text('Add Member' ,
+                    onPressed: (){
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return  PopupAddMember();
+                        },
+                      );
+                    },
+                    child: Text('Member' ,
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 12,

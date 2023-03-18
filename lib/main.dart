@@ -39,7 +39,7 @@ Future<void> main() async {
       User user = await UserService.fetchUserDetail();
       final UserController userController = Get.put(UserController());
       userController.AddUser(user);
-      // await AuthService.sendToken();
+      await AuthService.sendToken();
     } catch(error){
       print('Access Token: $accessToken}');
       print(error);

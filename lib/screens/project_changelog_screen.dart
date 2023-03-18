@@ -1,6 +1,7 @@
 import 'package:android/controller/ProjectController.dart';
 import 'package:android/services/ChangeLogService.dart';
 import 'package:android/widget/ChangeLogCard.dart';
+import 'package:android/widget/PopupCreateChangelog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -44,8 +45,15 @@ class _ProjectChangelogScreenState extends State<ProjectChangelogScreen> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               ElevatedButton(
-                  onPressed: (){},
-                  child: Text('Apply Job' ,
+                  onPressed: (){
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return  PopupCreateChangelog();
+                      },
+                    );
+                  },
+                  child: Text('Create' ,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 12,

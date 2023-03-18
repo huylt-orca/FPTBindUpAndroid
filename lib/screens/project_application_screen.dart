@@ -4,6 +4,8 @@ import 'package:android/widget/ProjectMemberCard.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../widget/PopupAddJob.dart';
+
 class ProjectApplicationScreen extends StatefulWidget {
   const ProjectApplicationScreen({Key? key}) : super(key: key);
 
@@ -25,8 +27,15 @@ class _ProjectApplicationScreenState extends State<ProjectApplicationScreen> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               ElevatedButton(
-                  onPressed: (){},
-                  child: Text('Add Job' ,
+                  onPressed: (){
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return  PopupAddJob();
+                      },
+                    );
+                  },
+                  child: Text('Create' ,
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold
