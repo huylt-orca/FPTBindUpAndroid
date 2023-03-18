@@ -1,11 +1,13 @@
 import 'package:android/constants.dart';
 import 'package:android/controller/ProjectController.dart';
+import 'package:android/controller/UserController.dart';
 import 'package:android/models/Project.dart';
 import 'package:android/models/ProjectImage.dart';
 import 'package:android/screens/project_detail_screen.dart';
 import 'package:android/services/ProjectService.dart';
 import 'package:android/widget/ProjectTypeWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 class ProjectCard extends StatefulWidget {
@@ -24,6 +26,8 @@ class _ProjectCardState extends State<ProjectCard> {
     return this.widget.project.logo!.isEmpty ? imageDemo : this.widget.project.logo  ;
   }
   bool isVote = true;
+  UserController userController = Get.put(UserController());
+
   @override
   Widget build(BuildContext context) {
 
@@ -121,6 +125,17 @@ class _ProjectCardState extends State<ProjectCard> {
                       padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 5))
                   ),
                   onPressed: () {
+                    if (userController.id.value == ""){
+                      Fluttertoast.showToast(
+                          msg: "Please login",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.grey[600],
+                          textColor: Colors.white,
+                          fontSize: 16.0
+                      );
+                    } else {
                     ProjectService.postVoteToProject(this.widget.project.id!);
                     setState(() {
                       if (isVote){
@@ -129,7 +144,9 @@ class _ProjectCardState extends State<ProjectCard> {
                         this.widget.project.voteQuantity = this.widget.project.voteQuantity! - 1  ;
                       }
                       isVote = !isVote;
+
                     });
+                    }
                   },
                   child: Column(
                     children: [
