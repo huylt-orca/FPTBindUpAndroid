@@ -8,24 +8,29 @@ import 'package:android/widget/ProjectTypeWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ProjectCard extends StatelessWidget {
+class ProjectCard extends StatefulWidget {
   final Project project;
   const ProjectCard(
       { Key? key,
         required this.project
       }) : super(key: key);
 
-  String? _getImage(){
-    return this.project.logo!.isEmpty ? imageDemo : this.project.logo  ;
-  }
+  @override
+  State<ProjectCard> createState() => _ProjectCardState();
+}
 
+class _ProjectCardState extends State<ProjectCard> {
+  String? _getImage(){
+    return this.widget.project.logo!.isEmpty ? imageDemo : this.widget.project.logo  ;
+  }
+  bool isVote = true;
   @override
   Widget build(BuildContext context) {
 
     return GestureDetector(
       onTap: ()async{
-        print(this.project.id);
-        await ProjectService.fetchProjectDetail(this.project.id!);
+        print(this.widget.project.id);
+        await ProjectService.fetchProjectDetail(this.widget.project.id!);
 
         Navigator.push(
           context,
@@ -77,7 +82,7 @@ class ProjectCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        this.project.name!,
+                        this.widget.project.name!,
                         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis ,
@@ -86,7 +91,7 @@ class ProjectCard extends StatelessWidget {
                         height: 5,
                       ),
                       Text(
-                      this.project.name!,
+                      this.widget.project.name!,
                      style: TextStyle(fontSize: 12),
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis ,
@@ -115,11 +120,21 @@ class ProjectCard extends StatelessWidget {
                     backgroundColor: MaterialStateProperty.all(Colors.blue) ,
                       padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 5))
                   ),
-                  onPressed: () {  },
+                  onPressed: () {
+                    ProjectService.postVoteToProject(this.widget.project.id!);
+                    setState(() {
+                      if (isVote){
+                        this.widget.project.voteQuantity = this.widget.project.voteQuantity! + 1;
+                      } else{
+                        this.widget.project.voteQuantity = this.widget.project.voteQuantity! - 1  ;
+                      }
+                      isVote = !isVote;
+                    });
+                  },
                   child: Column(
                     children: [
                       Icon(Icons.arrow_drop_up),
-                      Text(this.project.voteQuantity.toString())
+                      Text(this.widget.project.voteQuantity.toString())
                     ],
                   )
                 )
