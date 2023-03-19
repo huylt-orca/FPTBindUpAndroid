@@ -91,7 +91,7 @@ class ProjectService{
 
   static Future<List<Project>> fetchProjectList({
     int page =0,
-    int pageSize =4,
+    int pageSize =5,
     String sortBy = "id",
     int statusType = 0,
     String nameKeyword = ""

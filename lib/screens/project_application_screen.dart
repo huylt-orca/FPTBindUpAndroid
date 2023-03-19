@@ -38,6 +38,7 @@ class _ProjectApplicationScreenState extends State<ProjectApplicationScreen> {
                   child: Text('Create' ,
                     style: TextStyle(
                         color: Colors.white,
+                        fontSize: 12,
                         fontWeight: FontWeight.bold
                     ),
                   )
