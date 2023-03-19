@@ -63,7 +63,7 @@ class ChangelogService{
     }
   }
 
-  static Future<void> postChangelog(String description, String title)async {
+  static Future<void> postChangelog(String title,String description)async {
     ProjectController projectController = Get.put(ProjectController());
     final uri = Uri.parse(urlChangelog);
     final body = jsonEncode({

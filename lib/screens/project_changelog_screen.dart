@@ -45,12 +45,19 @@ class _ProjectChangelogScreenState extends State<ProjectChangelogScreen> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               ElevatedButton(
-                  onPressed: (){
-                    showDialog(
+                  onPressed: () async{
+                    await showDialog(
                       context: context,
                       builder: (BuildContext context) {
                         return  PopupCreateChangelog();
                       },
+                    );
+                    await ChangelogService.fetchChangelogList(projectId: projectController.id.value).then(
+                            (data)  {
+                          setState(() {
+                            changelogs = data;
+                          });
+                        }
                     );
                   },
                   child: Text('Create' ,

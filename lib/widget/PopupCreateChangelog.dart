@@ -1,4 +1,6 @@
+import 'package:android/services/ChangeLogService.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class PopupCreateChangelog extends StatefulWidget {
   const PopupCreateChangelog({Key? key}) : super(key: key);
@@ -8,6 +10,9 @@ class PopupCreateChangelog extends StatefulWidget {
 }
 
 class _PopupCreateChangelogState extends State<PopupCreateChangelog> {
+  TextEditingController _txtTitle = TextEditingController();
+  TextEditingController _txtDescription = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -17,10 +22,12 @@ class _PopupCreateChangelogState extends State<PopupCreateChangelog> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             TextFormField(
+              controller: _txtTitle,
               decoration: InputDecoration(labelText: 'Title'),
             ),
             const SizedBox(height: 10,),
             TextFormField(
+              controller: _txtDescription,
               decoration: InputDecoration(labelText: 'Description'),
             ),
           ],
@@ -34,9 +41,22 @@ class _PopupCreateChangelogState extends State<PopupCreateChangelog> {
           },
         ),
         ElevatedButton(
-          child: Text('Add'),
-          onPressed: () {
-            Navigator.of(context).pop();
+          child: Text('Create'),
+          onPressed: () async{
+            if (_txtTitle.text.trim().length == 0 || _txtDescription.text.trim().length == 0){
+              Fluttertoast.showToast(
+                  msg: "Create Changelog Failed",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.grey[600],
+                  textColor: Colors.white,
+                  fontSize: 16.0
+              );
+            } else{
+              await ChangelogService.postChangelog(_txtTitle.text, _txtDescription.text);
+              Navigator.of(context).pop();
+            }
           },
         ),
       ],
