@@ -1,5 +1,6 @@
 import 'package:android/constants.dart';
 import 'package:android/controller/UserController.dart';
+import 'package:android/services/Utils.dart';
 import 'package:android/widget/PopupAddMember.dart';
 import 'package:android/widget/PopupAddMentor.dart';
 import 'package:android/widget/ProjectMemberCard.dart';
@@ -48,7 +49,7 @@ class _ProjectMemberScreenState extends State<ProjectMemberScreen> {
       ));
     });
 
-    members.addAll(projectController.members);
+    // members.addAll(projectController.members);
 
   }
 
@@ -105,6 +106,7 @@ class _ProjectMemberScreenState extends State<ProjectMemberScreen> {
                 itemCount: members.length,
                   itemBuilder: (context,index){
                   String? tmpImage = members[index].title == "" ? imageDemo :members[index].title;
+
                     return ProjectMemberCard(name: members[index].name!, description: members[index].role!, image: tmpImage!);
                   }
               ),

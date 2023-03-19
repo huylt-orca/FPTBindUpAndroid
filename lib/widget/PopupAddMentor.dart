@@ -1,4 +1,10 @@
+import 'package:android/constants.dart';
+import 'package:android/services/MentorService.dart';
+import 'package:android/services/ProjectService.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import '../models/Mentor.dart';
 
 class PopupAddMentor extends StatefulWidget {
   const PopupAddMentor({Key? key}) : super(key: key);
@@ -14,12 +20,27 @@ class _PopupAddMentorState extends State<PopupAddMentor> {
   void _runFilter (String value){
 
   }
+  int _selectedItem = -1 ;
+  List<String> items = ["1","2","3"];
+  List<Mentor> mentors = List<Mentor>.empty(growable: true);
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    MentorService.fetchMentorList().then((data){
+        setState(() {
+          mentors = data;
+        });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text('Add Mentor'),
-      content: Form(
+      content:
+      Form(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -33,12 +54,51 @@ class _PopupAddMentorState extends State<PopupAddMentor> {
                   suffixIcon: Icon(Icons.search)
               ),
             ),
-            const SizedBox(height: 100,
-              child: Text(
-                "Hello"
-              ),
-            ),
+            const SizedBox(height: 10,),
+            Container(
+              height: 150,
+              width: 200,
 
+              child: Column(
+                children:[
+                  Expanded(
+                  child: ListView.builder(
+                      itemCount: mentors.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          child: Container(
+                              margin: EdgeInsets.symmetric(vertical: 2),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: index == _selectedItem ? Colors.blueAccent :Colors.white,
+                                border: Border.all(width: 1,
+                                  color: index == _selectedItem ? Colors.blueAccent :Colors.black,
+                                )
+                            ),
+                            child: ListTile(
+                              leading: ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: Image.network(imageDemo,width: 30,height: 30,),
+                              ),
+                              title: Text(mentors[index].name!,
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+                                ,),
+                              subtitle: Text(mentors[index].major!,
+                                style: TextStyle(fontSize: 12),
+                              ),
+
+                            ),
+                          ),
+                          onTap: (){
+                            setState(() {
+                              _selectedItem = index;
+                            });
+                          },
+                        );
+                      })),
+          ]
+              ),
+              ),
           ],
         ),
       ),
@@ -51,8 +111,16 @@ class _PopupAddMentorState extends State<PopupAddMentor> {
         ),
         ElevatedButton(
           child: Text('Add'),
-          onPressed: () {
-            Navigator.of(context).pop();
+          onPressed: () async{
+            if (_selectedItem == -1 ){
+              Fluttertoast.showToast(
+                  msg: "Please choose mentor"
+              );
+            } else {
+              await ProjectService.postMentorToProject(mentors[_selectedItem].id!);
+              Navigator.of(context).pop();
+            }
+
           },
         ),
       ],

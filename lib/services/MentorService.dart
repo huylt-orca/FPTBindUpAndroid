@@ -6,6 +6,8 @@ import '../constants.dart';
 import '../models/Mentor.dart';
 import 'package:http/http.dart' as http;
 
+import 'StorageService.dart';
+
 class MentorService{
   static const String urlMentor = server + "mentor/";
 
@@ -35,7 +37,12 @@ class MentorService{
         "&pageNo=${page}"
         "&sortBy=${sortBy}"
     ;
-    final response = await http.get(Uri.parse(urlMentor + options));
+    var headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${await StorageService.getAccessToken()}'
+    };
+    final response = await http.get(Uri.parse(urlMentor + options),headers: headers );
     if (response.statusCode ==200){
       return compute(parserMentorList,response.body);
     } else if (response.statusCode ==404){

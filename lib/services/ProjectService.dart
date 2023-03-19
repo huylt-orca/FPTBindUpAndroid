@@ -341,4 +341,28 @@ class ProjectService{
     }
   }
 
+  static Future<void> postMentorToProject(String mentorId) async{
+
+    ProjectController projectController = Get.put(ProjectController());
+
+    var headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${await StorageService.getAccessToken()}'
+    };
+
+    var uri = Uri.parse(urlProject + projectController.id.value +"/mentor");
+    final body = json.encode(mentorId);
+    try {
+      final response = await http.post(uri,body: body,headers: headers);
+      if (response.statusCode == 200){
+        print('Add Mentor to Product Successful');
+      } else{
+        print('Error: ${response.reasonPhrase}');
+      }
+    } catch (error){
+      print('print $error');
+    }
+  }
+
 }
