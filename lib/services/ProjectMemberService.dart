@@ -1,11 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
 
 import '../constants.dart';
+import '../controller/ProjectController.dart';
 import '../models/Member.dart';
 import '../models/Topic.dart';
 import 'package:http/http.dart' as http;
+
+import 'StorageService.dart';
 
 class ProjectMemberService{
   static const String urlMember = server + "member/";
@@ -59,7 +63,34 @@ class ProjectMemberService{
     }
   }
 
+  static Future<void> postMemberToProject(String name, String title, String role) async{
 
+    ProjectController projectController = Get.put(ProjectController());
+
+    var headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${await StorageService.getAccessToken()}'
+    };
+
+    var uri = Uri.parse(urlMember);
+    final body = json.encode({
+      'name': name,
+      'title': title,
+      'role': role,
+      'projectId': projectController.id.value
+    });
+    try {
+      final response = await http.post(uri,body: body,headers: headers);
+      if (response.statusCode == 200){
+        print('Add Mentor to Product Successful');
+      } else{
+        print('Error: ${response.reasonPhrase}');
+      }
+    } catch (error){
+      print('print $error');
+    }
+  }
 
 
 }
