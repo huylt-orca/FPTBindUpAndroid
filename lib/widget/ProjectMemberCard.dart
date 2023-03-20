@@ -52,7 +52,7 @@ class ProjectMemberCard extends StatelessWidget {
               ),
             ),
             Container(
-              width: 240,
+              width: 200,
               margin: EdgeInsets.all(10),
               decoration: BoxDecoration(
                   color: Colors.white
@@ -62,7 +62,7 @@ class ProjectMemberCard extends StatelessWidget {
                 children: [
                   Text(
                     this.name,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis ,
                   ),

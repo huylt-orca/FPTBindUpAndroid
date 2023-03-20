@@ -1,8 +1,16 @@
+import 'Job.dart';
+import 'Project.dart';
+import 'User.dart';
+
 class Application {
   String? id;
   String? createDate;
   String? description;
-  int? status;
+  String? status;
+
+  User? user;
+  Project? project;
+  Job? job;
 
   Application({
     this.id,
@@ -16,6 +24,19 @@ class Application {
     createDate = json['createDate'] ?? "";
     description = json['description'] ?? "";
     status = json['status'] ?? "";
+    // user = User.fromJson(json['userDTO']);
+    // project = Project.fromJson(json['projectDTO']);
+    // job = Job.fromJson(json['jobDTO']);
+  }
+
+  Application.fromJsonDetail(Map<String, dynamic> json) {
+    id = json['id'] ?? "";
+    createDate = json['createDate'] ?? "";
+    description = json['description'] ?? "";
+    status = json['status'] ?? "";
+    user = User.fromJson(json['userDTO']);
+    project = Project.fromJson(json['projectDTO']);
+    job = Job.fromJson(json['jobDTO']);
   }
 
   Map<String, dynamic> toJson() {

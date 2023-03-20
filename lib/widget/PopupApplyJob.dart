@@ -1,4 +1,10 @@
+import 'package:android/controller/ProjectController.dart';
+import 'package:android/services/ApplicationService.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+
+import '../models/Job.dart';
 
 class PopupApplyJob extends StatefulWidget {
   const PopupApplyJob({Key? key}) : super(key: key);
@@ -8,9 +14,23 @@ class PopupApplyJob extends StatefulWidget {
 }
 
 class _PopupApplyJobState extends State<PopupApplyJob> {
+  ProjectController projectController = Get.put(ProjectController());
 
-  List<String> genders = ["male","female"];
-  int _gender = 0;
+  List<Job> jobs = List<Job>.empty(growable: true);
+
+  Job? _seletedJob ;
+
+  TextEditingController _txtDescription = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    jobs =  projectController.jobs;
+    if (jobs.isNotEmpty){
+      _seletedJob = jobs[0];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,21 +40,16 @@ class _PopupApplyJobState extends State<PopupApplyJob> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            DropdownButtonFormField<String>(
-              value: genders[_gender],
-              items: genders.map((String gender) {
-                return DropdownMenuItem<String>(
-                  value: gender,
-                  child: Text(gender),
+            DropdownButtonFormField<Job>(
+              value: _seletedJob,
+              items: jobs.map((Job job) {
+                return DropdownMenuItem<Job>(
+                  value:  job,
+                  child: Text(job.name!),
                 );
               }).toList(),
-              onChanged: (String? value){
-                if (value =="Female"){
-                  this._gender = 1;
-                }
-                if (value == "Male"){
-                  this._gender = 0;
-                }
+              onChanged: (Job? value){
+                  _seletedJob = value;
               },
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.only(left: 0),
@@ -43,6 +58,7 @@ class _PopupApplyJobState extends State<PopupApplyJob> {
             ),
             const SizedBox(height: 10,),
             TextFormField(
+              controller: _txtDescription,
               decoration: InputDecoration(labelText: 'Description'),
             ),
           ],
@@ -57,7 +73,29 @@ class _PopupApplyJobState extends State<PopupApplyJob> {
         ),
         ElevatedButton(
           child: Text('Apply'),
-          onPressed: () {
+          onPressed: () async{
+            bool isSuccess = await ApplicationService.postApplication(_txtDescription.text, _seletedJob!.id!);
+            if (isSuccess){
+              Fluttertoast.showToast(
+                  msg: "Apply Job",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.grey[600],
+                  textColor: Colors.white,
+                  fontSize: 16.0
+              );
+            } else{
+              Fluttertoast.showToast(
+                  msg: "User already apply",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.grey[600],
+                  textColor: Colors.white,
+                  fontSize: 16.0
+              );
+            }
             Navigator.of(context).pop();
           },
         ),
