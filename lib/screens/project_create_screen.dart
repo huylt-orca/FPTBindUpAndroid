@@ -21,9 +21,6 @@ class CreateProjectScreen extends StatefulWidget {
 
 class _CreateProjectScreenState extends State<CreateProjectScreen> {
   File? image;
-  // final items = ['Khong','Co','Gi','Het'];
-  // String? selectedItem;
-  // List<File> imageProject = List<File>.empty(growable: true);
 
   ProjectService projectService = new ProjectService();
 
@@ -85,7 +82,7 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                     width: 120,
                     height: 120,
                     child: this.image == null ? Image(
-                        image:  AssetImage("assets/images/profileavatar.jpg"
+                        image:  AssetImage(imageUnknowPerson
                     ))
                     : Image.file(this.image!)
                     ,

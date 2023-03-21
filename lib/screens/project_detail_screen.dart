@@ -22,11 +22,13 @@ class ProjectDetailScreen extends StatelessWidget {
         elevation: 0,
         leading: BackButton(color: Colors.black),
       ),
-      body: Column(
-        children: [
-          HeaderProject(),
-          TabBarProject(),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            HeaderProject(),
+            TabBarProject(),
+          ],
+        ),
       ),
     );
   }

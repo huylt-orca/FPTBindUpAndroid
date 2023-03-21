@@ -1,5 +1,6 @@
 import 'package:android/constants.dart';
 import 'package:android/controller/ProjectController.dart';
+import 'package:android/controller/UserController.dart';
 import 'package:android/widget/PopupApplyJob.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -15,6 +16,7 @@ class ProjectOverviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserController userController = Get.put(UserController());
     final ProjectController projectController = Get.put(ProjectController());
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
@@ -47,12 +49,17 @@ class ProjectOverviewScreen extends StatelessWidget {
               fontSize: 20,
               fontWeight: FontWeight.bold
             ),),
-            Html(
-                data: projectController.description.value
+            Container(
+              height: 100,
+              child: SingleChildScrollView(
+                child: Html(
+                    data: projectController.description.value
+                ),
+              ),
             ),
             // SizedBox(height: 10,),
 
-            // projectController.jobs.length != 0 ?
+            projectController.jobs.length != 0 ?
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,22 +69,25 @@ class ProjectOverviewScreen extends StatelessWidget {
                     children: [
                       Text("Jobs", style: TextStyle(fontSize: 20,
                           fontWeight: FontWeight.bold,),),
-                      ElevatedButton(
-                          onPressed: (){
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return  PopupApplyJob();
-                              },
-                            );
-                          },
-                          child: Text('Apply' ,
-                            style: TextStyle(
-                              fontSize: 12,
-                                color: Colors.white,
-                              fontWeight: FontWeight.bold
-                            ),
-                          )
+                      Visibility(
+                        visible: userController.id.value != projectController.founder!.value.id,
+                        child: ElevatedButton(
+                            onPressed: (){
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return  PopupApplyJob();
+                                },
+                              );
+                            },
+                            child: Text('Apply' ,
+                              style: TextStyle(
+                                fontSize: 12,
+                                  color: Colors.white,
+                                fontWeight: FontWeight.bold
+                              ),
+                            )
+                        ),
                       )
                     ],
                   ),
@@ -91,7 +101,7 @@ class ProjectOverviewScreen extends StatelessWidget {
                 ],
               ),
             )
-            // :  SizedBox(height: 0),
+            :  SizedBox(height: 0),
           ],
         ),
       ),

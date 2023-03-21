@@ -82,13 +82,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
           SizedBox(
             width: 200,
             child: TextButton(
-              onPressed: (){
-                Navigator.push(
+              onPressed: () async{
+                await Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) =>
                     UpdateProfileScreen(),
                   ),
                 );
+                setState(() {
+                  _message = "update";
+                });
               } ,
               child: const Text("Edit Profile",
               style: TextStyle(color: Colors.white),

@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:android/constants.dart';
 import 'package:android/controller/UserController.dart';
+import 'package:android/models/User.dart';
+import 'package:android/services/UserService.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
@@ -19,6 +24,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   TextEditingController _txtHeadline = TextEditingController();
   TextEditingController _txtPhone = TextEditingController();
   int _gender = 0;
+  File? image;
 
   List<String> genders = ["Male", "FeMale"];
 
@@ -58,9 +64,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
                       child:
-                      userController.avatar.value == "" ?
+                      userController.avatar.value != "" ?
                         Image.network(userController.avatar.value) :
                         Image.network(imageDemo),
+
                     ),
                   ),
                   Positioned(
@@ -152,7 +159,20 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       SizedBox(
                         width: 200,
                         child: ElevatedButton(
-                          onPressed: (){},
+                          onPressed: () async{
+                            User user = User(
+                                name:_txtFullName.text,
+                                email: _txtEmail.text,
+                                address: _txtAddress.text,
+                                gender: _gender,
+                                headline: _txtHeadline.text,
+                                phone: _txtPhone.text
+                            );
+                            await UserService.putUser(user);
+                            Fluttertoast.showToast(msg: "Update Successful");
+                            User updateUser = await UserService.fetchUserDetail();
+                            userController.AddUser(updateUser);
+                          },
                           style: ElevatedButton.styleFrom(
                             side: BorderSide.none, shape: const StadiumBorder()
                           ),

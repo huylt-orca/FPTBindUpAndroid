@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:android/controller/UserController.dart';
 import 'package:android/models/ProjectImage.dart';
 import 'package:android/services/StorageService.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
 
 import '../constants.dart';
 import '../models/Project.dart';
@@ -127,6 +129,36 @@ class UserService{
     }
   }
 
+  static Future<void> putUser(User user) async {
+    UserController userController = Get.put(UserController());
 
+    var uri = Uri.parse(urlUser + userController.id.value);
+
+    var body = jsonEncode({
+      'name': user.name,
+      'gender': user.gender,
+      'headline': user.headline,
+      'description': user.description,
+      'address': user.address,
+      'phone': user.phone
+    });
+    var headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${await StorageService.getAccessToken()}'
+    };
+
+    try {
+      var response = await http.put(uri, body: body, headers: headers);
+
+      if (response.statusCode == 200) {
+        var responseData = jsonDecode(response.body);
+      } else {
+        print('Error: ${response.reasonPhrase}');
+      }
+    } catch (error) {
+      print('Error: $error');
+    }
+  }
 
 }
