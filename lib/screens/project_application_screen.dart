@@ -68,6 +68,7 @@ class _ProjectApplicationScreenState extends State<ProjectApplicationScreen> {
                 itemCount: applications.length,
                 itemBuilder: (context,index) {
                 return ProjectMemberCard(
+                  id: applications[index].id!,
                     name: applications[index].user!.name!,
                     description: applications[index].description!,
                     image: applications[index].user!.avatar! == "" ? imageDemo : applications[index].user!.avatar! ,

@@ -95,9 +95,10 @@ class ApplicationService{
   static Future<void> putProject(String applicationId, ApplicationStatus status) async {
 
     String options =
-        "?applicationId=${applicationId}"
+        "status?applicationId=${applicationId}"
         "&applicationStatus=${status.name}"
     ;
+    print (status.name);
 
     var uri = Uri.parse(urlApplication + options);
 

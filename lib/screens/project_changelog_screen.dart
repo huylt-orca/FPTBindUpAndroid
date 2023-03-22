@@ -1,4 +1,6 @@
 import 'package:android/controller/ProjectController.dart';
+import 'package:android/controller/UserController.dart';
+import 'package:android/models/User.dart';
 import 'package:android/services/ChangeLogService.dart';
 import 'package:android/widget/ChangeLogCard.dart';
 import 'package:android/widget/PopupCreateChangelog.dart';
@@ -16,6 +18,7 @@ class ProjectChangelogScreen extends StatefulWidget {
 
 class _ProjectChangelogScreenState extends State<ProjectChangelogScreen> {
   ProjectController projectController = Get.put(ProjectController());
+  UserController userController = Get.put(UserController());
   final scrollController = ScrollController();
   List<Changelog> changelogs = List<Changelog>.empty(growable: true);
   int page =0;
@@ -41,37 +44,40 @@ class _ProjectChangelogScreenState extends State<ProjectChangelogScreen> {
       padding: EdgeInsets.symmetric(horizontal: 5),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              ElevatedButton(
-                  onPressed: () async{
-                    await showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return  PopupCreateChangelog();
-                      },
-                    );
-                    await ChangelogService.fetchChangelogList(projectId: projectController.id.value).then(
-                            (data)  {
-                          setState(() {
-                            changelogs = data;
-                          });
-                        }
-                    );
-                  },
-                  child: Text('Create' ,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold
-                    ),
-                  )
-              )
-            ],
+          Visibility(
+            visible: projectController.founder.value.id == userController.id.value ,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ElevatedButton(
+                    onPressed: () async{
+                      await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return  PopupCreateChangelog();
+                        },
+                      );
+                      await ChangelogService.fetchChangelogList(projectId: projectController.id.value).then(
+                              (data)  {
+                            setState(() {
+                              changelogs = data;
+                            });
+                          }
+                      );
+                    },
+                    child: Text('Create' ,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold
+                      ),
+                    )
+                )
+              ],
+            ),
           ),
 
-          changelogs == 0 ?
+          changelogs.length == 0 ?
               Center(child: Text('No Changelog'),) :
           Expanded(
               child: ListView.builder(

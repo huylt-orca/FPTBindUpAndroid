@@ -317,7 +317,7 @@ class ProjectService{
     }
   }
 
-  static Future<void> postVoteToProject(String projectId) async{
+  static Future<int> postVoteToProject(String projectId) async{
 
     UserController userController = Get.put(UserController());
 
@@ -327,18 +327,20 @@ class ProjectService{
       'Authorization': 'Bearer ${await StorageService.getAccessToken()}'
     };
 
-    var uri = Uri.parse(urlProject + projectId +"/vote");
-    final body = json.encode(userController.id.value);
+    var uri = Uri.parse(urlProject + projectId +"/vote?userId=${userController.id.value}");
+    // final body = json.encode(userController.id.value);
     try {
-      final response = await http.post(uri,body: body,headers: headers);
+      final response = await http.post(uri,headers: headers);
       if (response.statusCode == 200){
         print('Vote to Product Successful');
+        return json.decode(response.body)['data'];
       } else{
         print('Error: ${response.reasonPhrase}');
       }
     } catch (error){
       print('print $error');
     }
+    return 0;
   }
 
   static Future<void> postMentorToProject(String mentorId) async{

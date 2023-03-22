@@ -1,16 +1,22 @@
 
 
+import 'package:android/controller/ProjectController.dart';
 import 'package:android/screens/project_detail_screen.dart';
+import 'package:android/services/ApplicationService.dart';
+import 'package:android/statusType/ApplicationStatus.dart';
 import 'package:android/widget/ProjectTypeWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProjectMemberCard extends StatelessWidget {
+  final String id;
   final String name;
   final String description;
   final String image;
   final bool isOwner ;
   const ProjectMemberCard(
       { Key? key,
+        this.id = "",
         required this.name,
         required this.description,
         required this.image,
@@ -19,6 +25,8 @@ class ProjectMemberCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ProjectController projectController = Get.put(ProjectController());
+
     return GestureDetector(
       onTap: (){},
       child: Container(
@@ -87,7 +95,9 @@ class ProjectMemberCard extends StatelessWidget {
                     SizedBox(
                       height:20,
                       child: ElevatedButton(
-                          onPressed: (){},
+                          onPressed: () async{
+                            await ApplicationService.putProject(id, ApplicationStatus.ACCEPTED);
+                          },
                           style: ButtonStyle(
                             minimumSize: MaterialStateProperty.all(Size(50, 20)),
                             backgroundColor: MaterialStateProperty.all(Colors.green),
@@ -107,7 +117,9 @@ class ProjectMemberCard extends StatelessWidget {
                     SizedBox(
                       height: 20,
                       child: ElevatedButton(
-                          onPressed: (){},
+                          onPressed: () async{
+                            await ApplicationService.putProject(id, ApplicationStatus.REJECTED);
+                          },
                           style: ButtonStyle(
                             minimumSize: MaterialStateProperty.all(Size(50, 20)),
                             backgroundColor: MaterialStateProperty.all(Colors.red),

@@ -22,7 +22,7 @@ class ProjectOverviewScreen extends StatelessWidget {
       scrollDirection: Axis.vertical,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        height: 300,
+        height: 350,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,

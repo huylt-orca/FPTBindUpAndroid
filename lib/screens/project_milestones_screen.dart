@@ -79,14 +79,14 @@ class _ProjectMilestonesScreenState extends State<ProjectMilestonesScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Visibility(
-                  visible: !(userController.id.value == projectController.founder.value.id && _currentStep == 0),
+                  visible: (userController.id.value == projectController.founder.value.id && _currentStep != 0),
                   child: TextButton(
                     onPressed: dtl.onStepCancel,
                     child: Text('BACK'),
                   ),
                 ),
                 Visibility(
-                  visible: !(userController.id.value == projectController.founder.value.id && _currentStep == 3),
+                  visible: (userController.id.value == projectController.founder.value.id && _currentStep != 3),
                   child: TextButton(
                     onPressed: dtl.onStepContinue,
                     child: Text('NEXT'),

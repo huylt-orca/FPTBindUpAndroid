@@ -28,6 +28,42 @@ class _ProjectCardState extends State<ProjectCard> {
   bool isVote = true;
   UserController userController = Get.put(UserController());
 
+  String getMilestone(){
+    switch (this.widget.project.milestone){
+      case 0:
+        return "Idea";
+        break;
+      case 1:
+        return "Upcoming";
+        break;
+      case 2:
+        return "Launching";
+        break;
+      case 3:
+        return "Finished";
+        break;
+        default: return "Idea";
+    }
+  }
+
+  Color getMilestoneColor(){
+    switch (this.widget.project.milestone){
+      case 0:
+        return Colors.lightGreenAccent;
+        break;
+      case 1:
+        return Colors.grey;
+        break;
+      case 2:
+        return Colors.blueAccent;
+        break;
+      case 3:
+        return Colors.deepOrange;
+        break;
+      default: return Colors.black;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -94,15 +130,17 @@ class _ProjectCardState extends State<ProjectCard> {
                       SizedBox(
                         height: 5,
                       ),
+                      ProjectTypeWidget(text: getMilestone(),boxColor: getMilestoneColor()),
+                      SizedBox(
+                        height: 5,
+                      ),
                       Text(
                       this.widget.project.name!,
                      style: TextStyle(fontSize: 12),
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis ,
                       ),
-                      // SizedBox(
-                      //   height: 5,
-                      // ),
+
                       // Row(
                       //   children: [
                       //     ProjectTypeWidget(text: "Topic",boxColor: Colors.deepOrange),
@@ -121,7 +159,7 @@ class _ProjectCardState extends State<ProjectCard> {
                 top: 25  ,
                 child: ElevatedButton(
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.blue) ,
+                    backgroundColor: MaterialStateProperty.all(Colors.lightBlueAccent) ,
                       padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 5))
                   ),
                   onPressed: () {
@@ -136,16 +174,13 @@ class _ProjectCardState extends State<ProjectCard> {
                           fontSize: 16.0
                       );
                     } else {
-                    ProjectService.postVoteToProject(this.widget.project.id!);
-                    setState(() {
-                      if (isVote){
-                        this.widget.project.voteQuantity = this.widget.project.voteQuantity! + 1;
-                      } else{
-                        this.widget.project.voteQuantity = this.widget.project.voteQuantity! - 1  ;
-                      }
-                      isVote = !isVote;
-
-                    });
+                    ProjectService.postVoteToProject(this.widget.project.id!).then(
+                        (data){
+                          setState(() {
+                            this.widget.project.voteQuantity = data;
+                          });
+                        }
+                    );
                     }
                   },
                   child: Column(

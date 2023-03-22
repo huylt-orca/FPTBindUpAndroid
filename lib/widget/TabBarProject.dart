@@ -1,5 +1,6 @@
 import 'package:android/constants.dart';
 import 'package:android/controller/ProjectController.dart';
+import 'package:android/controller/UserController.dart';
 import 'package:android/models/Project.dart';
 import 'package:android/models/ProjectImage.dart';
 import 'package:android/screens/project_application_screen.dart';
@@ -19,8 +20,9 @@ class TabBarProject extends StatefulWidget {
 }
 
 class _TabBarProjectState extends State<TabBarProject> {
-
-  List<String> tabProject = ["Overview", "Milestones","Member", "Changelog", "Application"];
+  ProjectController projectController = Get.put(ProjectController());
+  UserController userController = Get.put(UserController());
+  List<String> tabProject = ["Overview", "Milestones","Member", "Changelog"];
   int selectedIndex = 0;
   static final List<Widget> _widgetOptions = <Widget>[
     ProjectOverviewScreen(),
@@ -34,13 +36,17 @@ class _TabBarProjectState extends State<TabBarProject> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    if (projectController.founder.value.id == userController.id.value){
+      tabProject = ["Overview", "Milestones","Member", "Changelog", "Application"];
+    } else{
+      tabProject = ["Overview", "Milestones","Member", "Changelog"];
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Column(
         children: [
           SizedBox(
@@ -69,7 +75,7 @@ class _TabBarProjectState extends State<TabBarProject> {
         });
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 17),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
