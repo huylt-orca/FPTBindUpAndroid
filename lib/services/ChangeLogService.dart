@@ -63,7 +63,7 @@ class ChangelogService{
     }
   }
 
-  static Future<void> postChangelog(String title,String description)async {
+  static Future<bool> postChangelog(String title,String description)async {
     ProjectController projectController = Get.put(ProjectController());
     final uri = Uri.parse(urlChangelog);
     final body = jsonEncode({
@@ -82,13 +82,14 @@ class ChangelogService{
       final response = await http.post(uri,body: body,headers: headers);
       if (response.statusCode == 200){
         print('Create Changelog Successful');
+        return true;
       } else{
         print('Error: ${response.reasonPhrase}');
       }
     } catch (error){
       print('print $error');
     }
-
+    return false;
   }
 
 

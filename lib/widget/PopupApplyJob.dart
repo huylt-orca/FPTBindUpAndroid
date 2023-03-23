@@ -22,6 +22,13 @@ class _PopupApplyJobState extends State<PopupApplyJob> {
 
   TextEditingController _txtDescription = TextEditingController();
 
+  String? _validateDescription(String? value){
+    if (value == null || value.isEmpty){
+      return "Please enter description";
+    }
+    return null;
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -58,6 +65,7 @@ class _PopupApplyJobState extends State<PopupApplyJob> {
             ),
             const SizedBox(height: 10,),
             TextFormField(
+              validator: _validateDescription,
               controller: _txtDescription,
               decoration: InputDecoration(labelText: 'Description'),
             ),

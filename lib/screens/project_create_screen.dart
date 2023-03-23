@@ -7,6 +7,7 @@ import 'package:android/services/ProjectService.dart';
 import 'package:android/services/TopicService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
@@ -232,6 +233,7 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                               source: _txtSource.text
                             );
                              ProjectService.postProject(project, this.image,this._selectedItems);
+                             Fluttertoast.showToast(msg: 'Create Project Successful');
                              Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(

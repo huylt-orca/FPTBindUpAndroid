@@ -1,13 +1,18 @@
 
 import 'package:android/constants.dart';
 import 'package:android/models/responsetest.dart';
+import 'package:android/services/NotificationService.dart';
 import 'package:android/widget/NotificationCard.dart';
 import 'package:android/widget/TabBarProject.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../controller/UserController.dart';
+import '../models/NotificationCus.dart';
 import '../widget/ChangeLogCard.dart';
+import 'login_screen.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({Key? key}) : super(key: key);
@@ -17,35 +22,81 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
-  List<RemoteMessage> _messages =[];
+  List<NotificationCus> notifications = List<NotificationCus>.empty(growable: true);
+  // List<RemoteMessage> _messages =[];
+String reload = "";
 
   @override
-  void initState() {
+  initState()  {
     // TODO: implement initState
     super.initState();
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+
+    NotificationService.fetchNotificationList().then((data) {
       setState(() {
-        _messages = [message,..._messages];
+        notifications = data;
       });
+    });
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      NotificationService.fetchNotificationList().then((data) {
+        setState(() {
+          notifications = data;
+        });
+      });
+      // setState(() {
+      //   // _messages = [message,..._messages];
+      //   notifications = await NotificationService.fetchNotificationList();
+      // });
     });
   }
 
   @override
   Widget build(BuildContext context) {
 
-    if (_messages.isEmpty){
-      return const Text("No Notification");
+    UserController userController = Get.put(UserController());
+
+    if (userController.id.isEmpty){
+      return Center(
+        child: ElevatedButton(
+          child: Text("Login"),
+          onPressed: ()async {
+            await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>
+                    LoginScreen(),
+                )
+            );
+            setState(() {
+              reload ="hello";
+            });
+          },
+
+        ),
+      );
+    }
+    print(notifications.length);
+    if (notifications.length == 0){
+      return  Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.notifications_off_outlined,size: 100,),
+          SizedBox(height: 10,),
+          Text("No Notification",
+          style: TextStyle(
+            fontSize: 20
+          ),),
+        ],
+      );
     }
 
     return ListView.builder(
-        itemCount: _messages.length,
+        itemCount: notifications.length,
           itemBuilder: (context,index){
-          RemoteMessage message = _messages[index];
+          // RemoteMessage message = _messages[index];
         return NotificationCard(
-            title: message.notification?.title ?? "",
-            description: message.notification?.body ?? "",
-            image: message.notification?.android == null ? message.notification!.android!.imageUrl! : imageDemo,
-            time: message.sentTime!.toString()
+            title: notifications[index].title! ,
+            description: notifications[index].body!,
+            image: notifications[index].logo!,
+            time: notifications[index].createdDate!
         );
       },
 

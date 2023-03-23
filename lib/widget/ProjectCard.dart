@@ -49,7 +49,7 @@ class _ProjectCardState extends State<ProjectCard> {
   Color getMilestoneColor(){
     switch (this.widget.project.milestone){
       case 0:
-        return Colors.lightGreenAccent;
+        return Colors.green;
         break;
       case 1:
         return Colors.grey;

@@ -63,7 +63,7 @@ class ProjectMemberService{
     }
   }
 
-  static Future<void> postMemberToProject(String name, String title, String role) async{
+  static Future<bool> postMemberToProject(String name, String title, String role) async{
 
     ProjectController projectController = Get.put(ProjectController());
 
@@ -84,12 +84,14 @@ class ProjectMemberService{
       final response = await http.post(uri,body: body,headers: headers);
       if (response.statusCode == 200){
         print('Add Mentor to Product Successful');
+        return true;
       } else{
         print('Error: ${response.reasonPhrase}');
       }
     } catch (error){
       print('print $error');
     }
+    return false;
   }
 
 

@@ -4,6 +4,7 @@ import 'package:android/services/ApplicationService.dart';
 import 'package:android/widget/ProjectMemberCard.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 import '../models/Application.dart';
 import '../widget/PopupAddJob.dart';
@@ -62,7 +63,13 @@ class _ProjectApplicationScreenState extends State<ProjectApplicationScreen> {
           ),
 
           applications.length == 0 ?
-              Center(child: Text('No Applications'),) :
+              Column(
+                children: [
+                  Icon(Icons.access_time_outlined,size: 50,),
+                  SizedBox(height: 10,),
+                  Text('No Applications'),
+                ],
+              ) :
           Expanded(
             child: ListView.builder(
                 itemCount: applications.length,
@@ -71,7 +78,7 @@ class _ProjectApplicationScreenState extends State<ProjectApplicationScreen> {
                   id: applications[index].id!,
                     name: applications[index].user!.name!,
                     description: applications[index].description!,
-                    image: applications[index].user!.avatar! == "" ? imageDemo : applications[index].user!.avatar! ,
+                    image: applications[index].user!.avatar!, //== "" ? imageDemo : applications[index].user!.avatar! ,
                     isOwner: true,
                 );
               }

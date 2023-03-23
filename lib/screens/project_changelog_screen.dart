@@ -78,7 +78,14 @@ class _ProjectChangelogScreenState extends State<ProjectChangelogScreen> {
           ),
 
           changelogs.length == 0 ?
-              Center(child: Text('No Changelog'),) :
+              Center(child: Column(
+                children: [
+                  SizedBox(height: 50,),
+                  Icon(Icons.history,size: 100,),
+                  SizedBox(height: 10,),
+                  Text('No Changelog'),
+                ],
+              ),) :
           Expanded(
               child: ListView.builder(
                 itemCount: changelogs.length,

@@ -1,4 +1,8 @@
+import 'package:android/statusType/ApplicationStatus.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import '../services/ApplicationService.dart';
 class ApplicationCard extends StatelessWidget {
   final String id;
   final String name;
@@ -19,14 +23,14 @@ class ApplicationCard extends StatelessWidget {
     Color _statusColor = Colors.black;
     bool _show = false;
     switch(this.status){
-      case 'Pending':
+      case 'PENDING':
         _statusColor = Colors.amber;
         _show =true;
         break;
-      case 'Accepted':
+      case 'ACCEPTED':
         _statusColor = Colors.green;
         break;
-      case 'Denied':
+      case 'DENIED':
         _statusColor = Colors.red;
         break;
     }
@@ -109,7 +113,7 @@ class ApplicationCard extends StatelessWidget {
                             color: _statusColor,
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: Text("Pending",style: TextStyle(
+                          child: Text(this.status,style: TextStyle(
                             color: Colors.white,
                             fontSize: 12,
                             fontWeight: FontWeight.bold
@@ -118,8 +122,13 @@ class ApplicationCard extends StatelessWidget {
 
                         _show ?
                         GestureDetector(
-                          onTap: (){
-
+                          onTap: () async{
+                            bool isSuccessful = await ApplicationService.putProject(this.id, ApplicationStatus.REJECTED);
+                            if (isSuccessful){
+                              Fluttertoast.showToast(msg:"Cancel Successful");
+                            } else {
+                              Fluttertoast.showToast(msg:"Cancel Failed");
+                            }
                           },
                             child: Text("cancel",
                               style: TextStyle(color: Colors.red),

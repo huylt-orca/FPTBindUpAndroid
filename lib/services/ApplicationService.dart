@@ -92,7 +92,7 @@ class ApplicationService{
     }
   }
 
-  static Future<void> putProject(String applicationId, ApplicationStatus status) async {
+  static Future<bool> putProject(String applicationId, ApplicationStatus status) async {
 
     String options =
         "status?applicationId=${applicationId}"
@@ -112,12 +112,48 @@ class ApplicationService{
       print(response.statusCode);
       if (response.statusCode == 200) {
         print("Success Update Project");
-
+        return true;
       } else {
         print('Error: ${response.reasonPhrase}');
       }
     } catch (error) {
       print('Error: $error');
+    }
+    return false;
+  }
+
+  static Future<List<Application>> fetchApplicationListByUser({
+    int page =0,
+    int pageSize =5,
+    String sortBy = "created_timestamp",
+    int statusType = 0,
+    String ascending ="DESC"
+  }) async{
+    UserController userController = Get.put(UserController());
+
+    String options =
+        "user/?pageSize=${pageSize}"
+        "&pageNo=${page}"
+        "&sortBy=${sortBy}"
+        "&ascending=${ascending}"
+        "&status=${statusType}"
+        "&userId=${userController.id.value}"
+    ;
+
+    var headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${await StorageService.getAccessToken()}'
+    };
+
+    final response = await http.get(Uri.parse(urlApplication + options),headers: headers );
+    if (response.statusCode ==200){
+      print('Get Application Successful');
+      return compute(parserApplicationList,response.body);
+    } else if (response.statusCode ==404){
+      throw Exception('Not found');
+    } else{
+      throw Exception('Can\'t get');
     }
   }
 

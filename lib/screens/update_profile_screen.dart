@@ -168,10 +168,15 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                 headline: _txtHeadline.text,
                                 phone: _txtPhone.text
                             );
-                            await UserService.putUser(user);
-                            Fluttertoast.showToast(msg: "Update Successful");
-                            User updateUser = await UserService.fetchUserDetail();
-                            userController.AddUser(updateUser);
+                            bool isSuccessful =  await UserService.putUser(user);
+                            if (isSuccessful){
+                              Fluttertoast.showToast(msg: "Update Profile Successful");
+                              User updateUser = await UserService.fetchUserDetail();
+                              userController.AddUser(updateUser);
+                            } else {
+                              Fluttertoast.showToast(msg: "Update Profile Failed");
+                            }
+
                           },
                           style: ElevatedButton.styleFrom(
                             side: BorderSide.none, shape: const StadiumBorder()

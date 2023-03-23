@@ -1,5 +1,6 @@
 import 'package:android/services/ProjectMemberService.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class PopupAddMember extends StatefulWidget {
   const PopupAddMember({Key? key}) : super(key: key);
@@ -49,8 +50,14 @@ class _PopupAddMemberState extends State<PopupAddMember> {
         ElevatedButton(
           child: Text('Add'),
           onPressed: () async {
-            await ProjectMemberService.postMemberToProject(_txtName.text, _txtTitle.text, _txtRole.text);
-            Navigator.of(context).pop();
+            bool isSuccessful = await ProjectMemberService.postMemberToProject(_txtName.text, _txtTitle.text, _txtRole.text);
+            if (isSuccessful){
+              Fluttertoast.showToast(msg: "Add Member Successful");
+              Navigator.of(context).pop();
+            } else {
+              Fluttertoast.showToast(msg: "Add Member Failed");
+            }
+
           },
         ),
       ],

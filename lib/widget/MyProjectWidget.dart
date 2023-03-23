@@ -22,20 +22,22 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (this.widget.isOwner){
-      ProjectService.fetchOwnerProjectList().then(
-              (data) {
-              setState(() {
-                list = data;
-              });});
-    } else{
-      
-    }
 
   }
 
   @override
   Widget build(BuildContext context) {
+    if (this.widget.isOwner){
+      ProjectService.fetchOwnerProjectList().then(
+              (data) {
+            setState(() {
+              list = data;
+            });});
+    } else{
+      setState(() {
+        list = [];
+      });
+    }
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -62,7 +64,15 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
               )
             ],
           ),
-          list.isEmpty ? Center(child:Text("No Project")) :
+          list.isEmpty ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 50,),
+              Icon(Icons.add_circle,size: 50,),
+              SizedBox(height: 10,),
+              Text("No Project"),
+            ],
+          ) :
           Expanded(
             child: ListView.builder(
                 itemCount: list.length,

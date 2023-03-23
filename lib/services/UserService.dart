@@ -129,7 +129,7 @@ class UserService{
     }
   }
 
-  static Future<void> putUser(User user) async {
+  static Future<bool> putUser(User user) async {
     UserController userController = Get.put(UserController());
 
     var uri = Uri.parse(urlUser + userController.id.value);
@@ -152,13 +152,16 @@ class UserService{
       var response = await http.put(uri, body: body, headers: headers);
 
       if (response.statusCode == 200) {
-        var responseData = jsonDecode(response.body);
+        // var responseData = jsonDecode(response.body);
+        print('Edit Profile Successful');
+        return true;
       } else {
         print('Error: ${response.reasonPhrase}');
       }
     } catch (error) {
       print('Error: $error');
     }
+    return false;
   }
 
 }

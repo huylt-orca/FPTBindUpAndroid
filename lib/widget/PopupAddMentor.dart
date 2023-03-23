@@ -117,8 +117,13 @@ class _PopupAddMentorState extends State<PopupAddMentor> {
                   msg: "Please choose mentor"
               );
             } else {
-              await ProjectService.postMentorToProject(mentors[_selectedItem].id!);
-              Navigator.of(context).pop();
+              bool isSuccessful = await ProjectService.postMentorToProject(mentors[_selectedItem].id!);
+              if (isSuccessful){
+                Fluttertoast.showToast(msg: 'Add Mentor Successful');
+                Navigator.of(context).pop();
+              } else {
+                Fluttertoast.showToast(msg: 'Add Mentor Failed');
+              }
             }
 
           },

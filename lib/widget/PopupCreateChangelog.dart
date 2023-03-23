@@ -54,8 +54,21 @@ class _PopupCreateChangelogState extends State<PopupCreateChangelog> {
                   fontSize: 16.0
               );
             } else{
-              await ChangelogService.postChangelog(_txtTitle.text, _txtDescription.text);
-              Navigator.of(context).pop();
+              bool isSuccessful =  await ChangelogService.postChangelog(_txtTitle.text, _txtDescription.text);
+              if (isSuccessful) {
+                Fluttertoast.showToast(
+                    msg: "Create Changelog Successful",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.grey[600],
+                    textColor: Colors.white,
+                    fontSize: 16.0
+                );
+                Navigator.of(context).pop();
+              } else {
+                Fluttertoast.showToast(msg: "Create Changelog Failed");
+              }
             }
           },
         ),

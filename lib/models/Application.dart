@@ -23,7 +23,7 @@ class Application {
     id = json['id'] ?? "";
     createDate = json['createDate'] ?? "";
     description = json['description'] ?? "";
-    status = json['status'] ?? "";
+    status = json['applicationStatus'] ?? "";
     // user = User.fromJson(json['userDTO']);
     // project = Project.fromJson(json['projectDTO']);
     // job = Job.fromJson(json['jobDTO']);
@@ -33,7 +33,7 @@ class Application {
     id = json['id'] ?? "";
     createDate = json['createDate'] ?? "";
     description = json['description'] ?? "";
-    status = json['status'] ?? "";
+    status = json['applicationStatus'] ?? "";
     user = User.fromJson(json['userDTO']);
     project = Project.fromJson(json['projectDTO']);
     job = Job.fromJson(json['jobDTO']);
