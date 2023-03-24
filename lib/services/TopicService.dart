@@ -37,6 +37,7 @@ class TopicService{
     ;
     final response = await http.get(Uri.parse(urlTopic + options));
     if (response.statusCode ==200){
+      print('Get List Topic Successful');
       return compute(parserTopicList,response.body);
     } else if (response.statusCode ==404){
       throw Exception('Not found');
@@ -48,6 +49,7 @@ class TopicService{
   static Future<Topic> fetchTopicDetail( String topicId  ) async{
     final response = await http.get(Uri.parse(urlTopic + "$topicId"));
     if (response.statusCode ==200){
+      print('Get Topic Detail Successful');
       return compute(parserTopicDetail,response.body);
     } else if (response.statusCode ==404){
       throw Exception('Not found');
@@ -55,8 +57,4 @@ class TopicService{
       throw Exception('Can\'t get');
     }
   }
-
-
-
-
 }

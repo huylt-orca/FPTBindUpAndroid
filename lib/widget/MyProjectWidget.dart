@@ -22,11 +22,6 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-  }
-
-  @override
-  Widget build(BuildContext context) {
     if (this.widget.isOwner){
       ProjectService.fetchOwnerProjectList().then(
               (data) {
@@ -38,6 +33,11 @@ class _MyProjectWidgetState extends State<MyProjectWidget> {
         list = [];
       });
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(

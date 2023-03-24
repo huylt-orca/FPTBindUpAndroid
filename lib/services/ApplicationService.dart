@@ -109,9 +109,9 @@ class ApplicationService{
     };
     try {
       var response = await http.put(uri, headers: headers);
-      print(response.statusCode);
+
       if (response.statusCode == 200) {
-        print("Success Update Project");
+        print("Update Project Success");
         return true;
       } else {
         print('Error: ${response.reasonPhrase}');

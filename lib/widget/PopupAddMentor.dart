@@ -1,8 +1,10 @@
 import 'package:android/constants.dart';
+import 'package:android/controller/ProjectController.dart';
 import 'package:android/services/MentorService.dart';
 import 'package:android/services/ProjectService.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 
 import '../models/Mentor.dart';
 
@@ -14,7 +16,7 @@ class PopupAddMentor extends StatefulWidget {
 }
 
 class _PopupAddMentorState extends State<PopupAddMentor> {
-
+  ProjectController projectController = Get.put(ProjectController());
   String keyword ="";
 
   void _runFilter (String value){
@@ -120,6 +122,7 @@ class _PopupAddMentorState extends State<PopupAddMentor> {
               bool isSuccessful = await ProjectService.postMentorToProject(mentors[_selectedItem].id!);
               if (isSuccessful){
                 Fluttertoast.showToast(msg: 'Add Mentor Successful');
+                projectController.mentors = RxList(await MentorService.fetchMentorListByProject());
                 Navigator.of(context).pop();
               } else {
                 Fluttertoast.showToast(msg: 'Add Mentor Failed');

@@ -34,7 +34,7 @@ class AuthService{
 
       if (response.statusCode == 200) {
         var responseData = jsonDecode(response.body);
-        await AuthService.sendToken();
+        // await AuthService.sendToken();
         print("Access Token: " + responseData['token']);
         return responseData['token'];
       } else {
@@ -81,6 +81,7 @@ class AuthService{
     try {
     final response = await http.post(uri, body: body, headers: headers);
     if (response.statusCode == 200) {
+      print('Login Successful');
       final responseData = jsonDecode(response.body);
       StorageService.saveAccessToken(responseData['token']);
 
@@ -115,6 +116,7 @@ class AuthService{
       var response = await http.post(uri, body: body, headers: headers);
 
       if (response.statusCode == 200) {
+        print('Register Successful');
         var responseData = jsonDecode(response.body);
         print("Access Token: " + responseData['token']);
         return responseData['token'];
@@ -152,20 +154,15 @@ class AuthService{
 
     try {
       var response = await http.post(uri, headers: headers);
-      print ("Server:   ${response.statusCode}");
+
       if (response.statusCode == 200) {
-
+        print ('Send Device Token Successful');
       } else {
-
         print('Error: ${response.reasonPhrase}');
       }
     } catch (error) {
       // Xử lý lỗi khi không kết nối được đến API
       print('Error: $error');
     }
-
   }
-
-
-
 }

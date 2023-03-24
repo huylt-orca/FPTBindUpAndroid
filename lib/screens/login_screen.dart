@@ -20,7 +20,23 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _txtEmail = TextEditingController();
   TextEditingController _txtPassword = TextEditingController();
+  final formKey = GlobalKey<FormState>();
   AuthService authService = new AuthService();
+
+  String? _validateUsername(String? value){
+    if (value == null || value.isEmpty){
+      return "Please enter Username";
+    }
+    return null;
+  }
+
+  String? _validatePassword(String? value){
+    if (value == null || value.isEmpty){
+      return "Please enter Password";
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -53,6 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 20,),
                     
                     Form(
+                      key: formKey,
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 20),
                           child: Column(
@@ -60,6 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             children: [
                               TextFormField(
                                 controller: _txtEmail,
+                                validator: _validateUsername,
                                 decoration: const InputDecoration(
                                   prefixIcon: Icon(Icons.person_outline_outlined),
                                   labelText: "Username",
@@ -71,6 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               TextFormField(
                                 obscureText: true,
                                 controller: _txtPassword,
+                                validator: _validatePassword,
                                 decoration: const InputDecoration(
                                     prefixIcon: Icon(Icons.fingerprint),
                                     labelText: "Password",
@@ -97,26 +116,28 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: ElevatedButton(
                                     onPressed: () async {
                                       try {
-                                        String token = await authService
-                                                      .signInWithEmailAndPassword(
-                                            _txtEmail.text,
-                                            _txtPassword.text
-                                        );
-                                        StorageService.saveAccessToken(token);
+                                        if (formKey.currentState!.validate()){
+                                          String token = await authService
+                                              .signInWithEmailAndPassword(
+                                              _txtEmail.text,
+                                              _txtPassword.text
+                                          );
+                                          StorageService.saveAccessToken(token);
 
-                                        UserModel.User user = await UserService.fetchUserDetail();
+                                          UserModel.User user = await UserService.fetchUserDetail();
 
-                                        final UserController userController = Get.put(UserController());
+                                          final UserController userController = Get.put(UserController());
 
-                                        userController.AddUser(user);
-                                        print('Send token');
-                                        await AuthService.sendToken();
+                                          userController.AddUser(user);
+                                          print('Send token');
+                                          await AuthService.sendToken();
 
-                                        Navigator.pop(context);
+                                          Navigator.pop(context);
 
-                                        print('success');
+                                          print('Success');
+                                        }
                                       }catch (error){
-                                        print('failed');
+                                        print('Failed');
                                       }
                                     },
                                     child: Text('LOGIN',
@@ -146,8 +167,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                 userController.AddUser(user);
 
-                                // print('Send token');
-                                // await AuthService.sendToken();
+                                print('Send token');
+                                await AuthService.sendToken();
 
                                 Navigator.pop(context);
 

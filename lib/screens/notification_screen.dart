@@ -25,18 +25,21 @@ class _NotificationScreenState extends State<NotificationScreen> {
   List<NotificationCus> notifications = List<NotificationCus>.empty(growable: true);
   // List<RemoteMessage> _messages =[];
 String reload = "";
+  UserController userController = Get.put(UserController());
 
   @override
   initState()  {
     // TODO: implement initState
     super.initState();
-
-    NotificationService.fetchNotificationList().then((data) {
-      setState(() {
-        notifications = data;
+    if (userController.id.value != "") {
+      NotificationService.fetchNotificationList().then((data) {
+        setState(() {
+          notifications = data;
+        });
       });
-    });
+    }
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print(message.sentTime);
       NotificationService.fetchNotificationList().then((data) {
         setState(() {
           notifications = data;
@@ -73,7 +76,6 @@ String reload = "";
         ),
       );
     }
-    print(notifications.length);
     if (notifications.length == 0){
       return  Column(
         mainAxisAlignment: MainAxisAlignment.center,

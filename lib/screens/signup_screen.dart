@@ -1,5 +1,6 @@
 import 'package:android/screens/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
@@ -22,6 +23,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController _txtUsername = TextEditingController();
   TextEditingController _txtName = TextEditingController();
   TextEditingController _txtPhone = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
+  String? _validateUsername(String? value){
+    if (value == null || value.isEmpty){
+      return "Please enter Username";
+    }
+    return null;
+  }
+  String? _validatePassword(String? value){
+    if (value == null || value.isEmpty){
+      return "Please enter Password";
+    }
+    return null;
+  }
+  String? _validateEmail(String? value){
+    if (value == null || value.isEmpty){
+      return "Please enter Email";
+    }
+    return null;
+  }
+  String? _validateName(String? value){
+    if (value == null || value.isEmpty){
+      return "Please enter Name";
+    }
+    return null;
+  }
+  String? _validatePhone(String? value){
+    if (value == null || value.isEmpty){
+      return "Please enter Phone";
+    }
+    return null;
+  }
+
   int _gender = 0;
   AuthService authService = new AuthService();
   List<String> genders = ["Male", "Female"];
@@ -57,9 +91,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(height: 20,),
 
                   Form(
+                    key: formKey,
                       child:Column(
                         children: [
                           TextFormField(
+                            validator: _validateUsername,
                             controller: _txtUsername,
                             decoration: const InputDecoration(
                                 prefixIcon: Icon(Icons.person_outline_outlined),
@@ -69,6 +105,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           const SizedBox(height: 10,),
                           TextFormField(
+                            validator: _validatePassword,
                             obscureText: true,
                             controller: _txtPassword,
                             decoration: const InputDecoration(
@@ -83,6 +120,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           const SizedBox(height: 10,),
                           TextFormField(
+                            validator: _validateName,
                             controller: _txtName,
                             decoration: const InputDecoration(
                                 label: Text("Fullname"),
@@ -114,6 +152,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                           const SizedBox(height: 10),
                           TextFormField(
+                            validator: _validateEmail,
                             controller: _txtEmail,
                             decoration: const InputDecoration(
                                 label: Text("Email"),
@@ -123,6 +162,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           const SizedBox(height: 10),
                           TextFormField(
+                            validator: _validatePhone,
                             controller: _txtPhone,
                             decoration: const InputDecoration(
                                 label: Text("Phone"),
@@ -135,29 +175,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             width: 200,
                             child: ElevatedButton(
                               onPressed: () async{
-                                try {
-                                  String token = await authService
-                                      .registerAccount(
-                                      username:  _txtUsername.text,
-                                      password: _txtPassword.text,
-                                      email: _txtEmail.text,
-                                      fullname: _txtName.text,
-                                      gender: this._gender,
-                                      phone: _txtPhone.text
-                                  );
-                                  StorageService.saveAccessToken(token);
+                                if (formKey.currentState!.validate()){
+                                  try {
+                                    String token = await authService
+                                        .registerAccount(
+                                        username:  _txtUsername.text,
+                                        password: _txtPassword.text,
+                                        email: _txtEmail.text,
+                                        fullname: _txtName.text,
+                                        gender: this._gender,
+                                        phone: _txtPhone.text
+                                    );
+                                    StorageService.saveAccessToken(token);
 
-                                  User user = await UserService.fetchUserDetail();
+                                    User user = await UserService.fetchUserDetail();
 
-                                  final UserController userController = Get.put(UserController());
+                                    final UserController userController = Get.put(UserController());
 
-                                  userController.AddUser(user);
+                                    userController.AddUser(user);
+                                    print('Success');
 
-                                  Navigator.pop(context);
+                                    Fluttertoast.showToast(msg: "Register Successful");
+                                    Navigator.pop(context);
 
-                                  print('success');
-                                }catch (error){
-                                  print('failed');
+
+                                  }catch (error){
+                                    Fluttertoast.showToast(msg: "Register Failed");
+                                    print('Failed');
+                                  }
                                 }
                               },
                               style: ElevatedButton.styleFrom(

@@ -12,21 +12,39 @@ class PopupCreateChangelog extends StatefulWidget {
 class _PopupCreateChangelogState extends State<PopupCreateChangelog> {
   TextEditingController _txtTitle = TextEditingController();
   TextEditingController _txtDescription = TextEditingController();
+ final formKey = GlobalKey<FormState>();
+
+  String? _validateTitle(String? value){
+    if ( value!.isEmpty){
+      return "Please enter Title";
+    }
+    return null;
+  }
+
+  String? _validateDescription(String? value){
+    if ( value!.isEmpty){
+      return "Please enter Description";
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text('Create Changelog'),
       content: Form(
+        key: formKey,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             TextFormField(
+              validator: _validateTitle,
               controller: _txtTitle,
               decoration: InputDecoration(labelText: 'Title'),
             ),
             const SizedBox(height: 10,),
             TextFormField(
+              validator: _validateDescription,
               controller: _txtDescription,
               decoration: InputDecoration(labelText: 'Description'),
             ),
@@ -43,17 +61,7 @@ class _PopupCreateChangelogState extends State<PopupCreateChangelog> {
         ElevatedButton(
           child: Text('Create'),
           onPressed: () async{
-            if (_txtTitle.text.trim().length == 0 || _txtDescription.text.trim().length == 0){
-              Fluttertoast.showToast(
-                  msg: "Create Changelog Failed",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.grey[600],
-                  textColor: Colors.white,
-                  fontSize: 16.0
-              );
-            } else{
+            if (formKey.currentState!.validate()){
               bool isSuccessful =  await ChangelogService.postChangelog(_txtTitle.text, _txtDescription.text);
               if (isSuccessful) {
                 Fluttertoast.showToast(

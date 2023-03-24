@@ -44,6 +44,7 @@ class ChangelogService{
     final response = await http.get(Uri.parse(urlChangelog + options));
     print(response.statusCode);
     if (response.statusCode ==200){
+      print('Get Changelog Successful');
       return compute(parserChangelogList,response.body);
     } else if (response.statusCode ==404){
       throw Exception('Not found');
@@ -55,6 +56,7 @@ class ChangelogService{
   static Future<Changelog> fetchChangelogDetail( String changelogId  ) async{
     final response = await http.get(Uri.parse(urlChangelog + "$changelogId"));
     if (response.statusCode ==200){
+      print('Get Changelog Detail Successful');
       return compute(parserChangelogDetail,response.body);
     } else if (response.statusCode ==404){
       throw Exception('Not found');
@@ -91,8 +93,4 @@ class ChangelogService{
     }
     return false;
   }
-
-
-
-
 }

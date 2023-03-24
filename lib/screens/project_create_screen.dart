@@ -30,6 +30,39 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
   TextEditingController _txtSummary = TextEditingController();
   TextEditingController _txtSource = TextEditingController();
 
+  final formKey = GlobalKey<FormState>();
+
+  String? _validateName(String? value){
+    if (value == null || value.isEmpty){
+      return "Please enter Project Name";
+    }
+    return null;
+  }
+
+  String? _validateDescription(String? value){
+    if (value == null || value.isEmpty){
+      return "Please enter Description";
+    }
+    return null;
+  }
+
+  String? _validateSummary(String? value){
+    if (value == null || value.isEmpty){
+      return "Please enter Summary";
+    }
+    return null;
+  }
+
+  String? _validateSource(String? value){
+    if (value == null || value.isEmpty){
+      return null;
+    } else {
+      // check source if have value
+      return null;
+    }
+
+    return null;
+  }
 
   @override
   void initState() {
@@ -121,9 +154,11 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
               ),
               const SizedBox(height: 10,),
               Form(
+                key: formKey,
                   child:Column(
                     children: [
                       TextFormField(
+                        validator: _validateName,
                         controller: _txtName,
                         decoration: const InputDecoration(
                             label: Text("Project Name"),
@@ -135,6 +170,7 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
 
                       const SizedBox(height: 10),
                       TextFormField(
+                        validator: _validateSummary,
                         controller: _txtSummary,
                         decoration: const InputDecoration(
                             label: Text("Summary"),
@@ -143,6 +179,7 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                       ),
                       const SizedBox(height: 10),
                       TextFormField(
+                        validator: _validateSource,
                         controller: _txtSource,
                         decoration: const InputDecoration(
                             label: Text("Source"),
@@ -152,6 +189,7 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                       const SizedBox(height: 10),
 
                       TextFormField(
+                        validator: _validateDescription,
                         controller: _txtDescription,
                         decoration: const InputDecoration(
                             label: Text("Description"),
@@ -225,16 +263,17 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                         width: 200,
                         child: ElevatedButton(
                           onPressed: ()async{
-
-                            Project project = new Project(
-                                name: _txtName.text,
-                                summary: _txtSummary.text,
-                              description: _txtDescription.text,
-                              source: _txtSource.text
-                            );
-                             ProjectService.postProject(project, this.image,this._selectedItems);
-                             Fluttertoast.showToast(msg: 'Create Project Successful');
-                             Navigator.pop(context);
+                            if (formKey.currentState!.validate()){
+                              Project project = new Project(
+                                  name: _txtName.text,
+                                  summary: _txtSummary.text,
+                                  description: _txtDescription.text,
+                                  source: _txtSource.text
+                              );
+                              ProjectService.postProject(project, this.image,this._selectedItems);
+                              Fluttertoast.showToast(msg: 'Create Project Successful');
+                              Navigator.pop(context);
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                               side: BorderSide.none, shape: const StadiumBorder()

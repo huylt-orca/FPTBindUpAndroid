@@ -36,7 +36,6 @@ class JobService{
 
     try {
       var response = await http.post(uri, body: body, headers: headers);
-      print(response.statusCode);
       if (response.statusCode == 200) {
         print ('Create Job Successful');
         return true;
@@ -53,7 +52,6 @@ class JobService{
     ProjectController projectController = Get.put(ProjectController());
 
     final response = await http.get(Uri.parse(urlJob + "${projectController.id.value}/"));
-    print(response.statusCode);
     if (response.statusCode ==200){
       print('Get Job List Successful');
       return compute(parserJobList,response.body);

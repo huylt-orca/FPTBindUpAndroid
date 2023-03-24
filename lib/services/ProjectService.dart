@@ -14,7 +14,6 @@ import 'package:android/services/StorageService.dart';
 import 'package:android/services/UserService.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../constants.dart';
 import '../models/Project.dart';
@@ -110,6 +109,7 @@ class ProjectService{
 
     final response = await http.get(Uri.parse(urlProject + options));
     if (response.statusCode ==200){
+      print('Get Líst Project Successful');
       return compute(parserProjectList,response.body);
     } else if (response.statusCode ==404){
       throw Exception('Not found');
@@ -121,6 +121,7 @@ class ProjectService{
   static Future<Project> fetchProjectDetail( String projectId  ) async{
     final response = await http.get(Uri.parse(urlProject + "${projectId}"));
     if (response.statusCode ==200){
+      print('Get Project Detail Successful');
       ProjectController projectController = Get.put(ProjectController());
       var data = json.decode(response.body)['data'];
       print(data['images'].length);
@@ -172,6 +173,7 @@ class ProjectService{
   static Future<List<ProjectImage>> fetchProjectImageList(String projectId) async{
     final response = await http.get(Uri.parse(urlProject + "$projectId/image/"));
     if (response.statusCode ==200){
+      print('Get List Project Image Successful');
       return compute(parserProjectImageList,response.body);
     } else if (response.statusCode ==404){
       throw Exception('Not found');
@@ -202,10 +204,9 @@ class ProjectService{
     };
     try {
       var response = await http.post(uri, body: body, headers: headers);
-      print(response.statusCode);
       if (response.statusCode == 200) {
+        print('Create Project Successful');
         var responseData = jsonDecode(response.body);
-        print(responseData['data']);
 
         if (imageFile != null) {
           // upload image
@@ -223,7 +224,11 @@ class ProjectService{
 
           final response = await request.send();
 
-          print(response.statusCode);
+          if(response.statusCode== 200){
+           print ('Add Logo to Project Successful');
+          } else {
+            print ('Add Logo to Project Failed');
+          }
 
           // end upload image
         }
@@ -247,13 +252,14 @@ class ProjectService{
       'Accept': 'application/json',
       'Authorization': 'Bearer ${await StorageService.getAccessToken()}'
     };
-
-    var uri = Uri.parse(urlProject + projectId +"/topic");
-    List<String> topicId = [];
-    topics.forEach((topic) => topicId.add(topic.id!));
-    final body = json.encode(topicId);
+    String options = "?";
+    topics.forEach((topic) => options += "topicIds=${topic.id!}");
+    var uri = Uri.parse(urlProject + projectId +"/topic" + options);
+    // List<String> topicId = [];
+    // topics.forEach((topic) => topicId.add(topic.id!));
+    // final body = json.encode(topicId);
     try {
-      final response = await http.post(uri,body: body,headers: headers);
+      final response = await http.post(uri,headers: headers);
       if (response.statusCode == 200){
         print('Add Topic to Product Successful');
       } else{
@@ -269,6 +275,7 @@ class ProjectService{
 
     final response = await http.get(Uri.parse(UserService.urlUser +"${userController.id}/projects"));
     if (response.statusCode ==200){
+      print('Get List Project By userId Successful');
       return compute(parserProjectList,response.body);
     } else if (response.statusCode ==404){
       throw Exception('Not found');
@@ -281,34 +288,27 @@ class ProjectService{
 
     String options =
         "?id=${project.id}"
-        "&name=${project.name}"
-        "&summary=${project.summary}"
-        "&description=${project.description}"
-        "&source=${project.source}"
-        "&milestone=${project.milestone}"
     ;
 
     var uri = Uri.parse(urlProject + options);
 
-    // var body = jsonEncode({
-    //   'id': project.id,
-    //   'name': project.name,
-    //   'summary': project.summary,
-    //   'description': project.description,
-    //   'source': project.source,
-    //   'milestone': project.milestone,
-    // });
+    var body = jsonEncode({
+      'name': project.name,
+      'summary': project.summary,
+      'description': project.description,
+      'source': project.source,
+      'milestone': project.milestone,
+    });
     var headers = {
       'Content-type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer ${await StorageService.getAccessToken()}'
     };
     try {
-      var response = await http.put(uri, body: null, headers: headers);
+      var response = await http.put(uri, body: body, headers: headers);
       print(response.statusCode);
       if (response.statusCode == 200) {
         print("Success Update Project");
-
       } else {
         print('Error: ${response.reasonPhrase}');
       }
@@ -328,7 +328,7 @@ class ProjectService{
     };
 
     var uri = Uri.parse(urlProject + projectId +"/vote?userId=${userController.id.value}");
-    // final body = json.encode(userController.id.value);
+
     try {
       final response = await http.post(uri,headers: headers);
       if (response.statusCode == 200){
@@ -353,10 +353,10 @@ class ProjectService{
       'Authorization': 'Bearer ${await StorageService.getAccessToken()}'
     };
 
-    var uri = Uri.parse(urlProject + projectController.id.value +"/mentor");
-    final body = json.encode(mentorId);
+    var uri = Uri.parse(urlProject + projectController.id.value +"/mentor?mentorId=${mentorId}");
+    // final body = json.encode(mentorId);
     try {
-      final response = await http.post(uri,body: body,headers: headers);
+      final response = await http.post(uri,headers: headers);
       if (response.statusCode == 200){
         print('Add Mentor to Product Successful');
         return true;
@@ -368,7 +368,4 @@ class ProjectService{
     }
     return false;
   }
-
-
-
 }

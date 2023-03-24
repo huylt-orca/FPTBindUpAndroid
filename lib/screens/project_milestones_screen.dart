@@ -32,7 +32,6 @@ class _ProjectMilestonesScreenState extends State<ProjectMilestonesScreen> {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Container(
-        height: 280,
         child:  Stepper(
             currentStep: _currentStep,
           onStepContinue: () {
@@ -98,25 +97,25 @@ class _ProjectMilestonesScreenState extends State<ProjectMilestonesScreen> {
             steps:  [
               Step(
                 title: Text('Idea'),
-                content: Text('Lên ý tưởng'),
+                content: Text('Brainstorm ideas, find ways to solve problems'),
                 isActive: projectController.milestone.value >=0,
                 state: projectController.milestone.value >=0 ? StepState.complete :StepState.indexed
               ),
               Step(
                 title: Text('Upcoming'),
-                content: Text('Tìm kiếm tài năng'),
+                content: Text('Recruit more members, mentors, create demo products'),
                   isActive: projectController.milestone.value >=1,
                   state: projectController.milestone.value >=1 ? StepState.complete :StepState.indexed
               ),
               Step(
                 title: Text('Launching'),
-                content: Text('Deploy lên các nền tảng'),
+                content: Text('Deploy to platforms, support customer care'),
                   isActive: projectController.milestone.value >=2,
                   state: projectController.milestone.value >=2 ? StepState.complete :StepState.indexed
               ),
               Step(
                 title: Text('Finished'),
-                content: Text('Finished'),
+                content: Text('Completed projects'),
                   isActive: projectController.milestone.value >=3,
                   state: projectController.milestone.value >=3 ? StepState.complete :StepState.indexed
               )

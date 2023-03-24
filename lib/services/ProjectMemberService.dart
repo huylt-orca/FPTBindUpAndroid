@@ -21,6 +21,13 @@ class ProjectMemberService{
     return members;
   }
 
+  static List<Member> parserMemberListByProjectId(String responseBody){
+    var data = json.decode(responseBody) ;
+    var list = data['data'] as List<dynamic>;
+    List<Member> members = list.map((model) => Member.fromJson(model)).toList();
+    return members;
+  }
+
   static Member parserMemberDetail(String responseBody){
     var data = json.decode(responseBody) ;
     var memberJson = data['data'] ;
@@ -44,7 +51,24 @@ class ProjectMemberService{
     ;
     final response = await http.get(Uri.parse(urlMember + options));
     if (response.statusCode ==200){
+      print('Get List Member Successful');
       return compute(parserMemberList,response.body);
+    } else if (response.statusCode ==404){
+      throw Exception('Not found');
+    } else{
+      throw Exception('Can\'t get');
+    }
+  }
+
+  static Future<List<Member>> fetchMemberListByProjectId() async{
+    ProjectController projectController = Get.put(ProjectController());
+    String options =
+        "?&projectId=${projectController.id.value}"
+    ;
+    final response = await http.get(Uri.parse(urlMember + options));
+    if (response.statusCode ==200){
+      print('Get List Member By Project Successful');
+      return compute(parserMemberListByProjectId,response.body);
     } else if (response.statusCode ==404){
       throw Exception('Not found');
     } else{
@@ -55,6 +79,7 @@ class ProjectMemberService{
   static Future<Member> fetchMemberDetail( String memberId  ) async{
     final response = await http.get(Uri.parse(urlMember + "$memberId"));
     if (response.statusCode ==200){
+      print('Get Member Detail Successful');
       return compute(parserMemberDetail,response.body);
     } else if (response.statusCode ==404){
       throw Exception('Not found');

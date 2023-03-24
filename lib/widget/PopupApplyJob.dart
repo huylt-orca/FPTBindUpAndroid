@@ -20,6 +20,7 @@ class _PopupApplyJobState extends State<PopupApplyJob> {
 
   Job? _seletedJob ;
 
+  final formKey = GlobalKey<FormState>();
   TextEditingController _txtDescription = TextEditingController();
 
   String? _validateDescription(String? value){
@@ -44,6 +45,7 @@ class _PopupApplyJobState extends State<PopupApplyJob> {
     return AlertDialog(
       title: Text('Apply Job'),
       content: Form(
+        key: formKey,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -82,29 +84,32 @@ class _PopupApplyJobState extends State<PopupApplyJob> {
         ElevatedButton(
           child: Text('Apply'),
           onPressed: () async{
-            bool isSuccess = await ApplicationService.postApplication(_txtDescription.text, _seletedJob!.id!);
-            if (isSuccess){
-              Fluttertoast.showToast(
-                  msg: "Apply Job",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.grey[600],
-                  textColor: Colors.white,
-                  fontSize: 16.0
-              );
-            } else{
-              Fluttertoast.showToast(
-                  msg: "User already apply",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.grey[600],
-                  textColor: Colors.white,
-                  fontSize: 16.0
-              );
+            if (formKey.currentState!.validate()) {
+              bool isSuccess = await ApplicationService.postApplication(
+                  _txtDescription.text, _seletedJob!.id!);
+              if (isSuccess) {
+                Fluttertoast.showToast(
+                    msg: "Apply Job",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.grey[600],
+                    textColor: Colors.white,
+                    fontSize: 16.0
+                );
+              } else {
+                Fluttertoast.showToast(
+                    msg: "User already apply",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.grey[600],
+                    textColor: Colors.white,
+                    fontSize: 16.0
+                );
+              }
+              Navigator.of(context).pop();
             }
-            Navigator.of(context).pop();
           },
         ),
       ],

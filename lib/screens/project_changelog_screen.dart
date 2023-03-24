@@ -40,7 +40,7 @@ class _ProjectChangelogScreenState extends State<ProjectChangelogScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: 350,
       padding: EdgeInsets.symmetric(horizontal: 5),
       child: Column(
         children: [

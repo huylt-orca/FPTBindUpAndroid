@@ -55,6 +55,7 @@ class UserService{
 
     final response = await http.get(Uri.parse(urlUser + options));
     if (response.statusCode ==200){
+      print('Get List User Successful');
       return compute(parserUserList,response.body);
     } else if (response.statusCode ==404){
       throw Exception('Not found');
@@ -85,6 +86,7 @@ class UserService{
       );
       print(response.statusCode);
       if (response.statusCode ==200){
+        print ('Get User Detail Successful');
         return compute(parserUserDetail,response.body);
       } else if (response.statusCode ==404){
         throw Exception('Not found');
@@ -120,7 +122,7 @@ class UserService{
       var response = await http.post(uri, body: body, headers: headers);
 
       if (response.statusCode == 200) {
-        var responseData = jsonDecode(response.body);
+        print('Create User Successful');
       } else {
         print('Error: ${response.reasonPhrase}');
       }
@@ -152,7 +154,6 @@ class UserService{
       var response = await http.put(uri, body: body, headers: headers);
 
       if (response.statusCode == 200) {
-        // var responseData = jsonDecode(response.body);
         print('Edit Profile Successful');
         return true;
       } else {
@@ -163,5 +164,4 @@ class UserService{
     }
     return false;
   }
-
 }

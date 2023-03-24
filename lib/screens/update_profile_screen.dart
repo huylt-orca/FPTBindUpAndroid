@@ -26,6 +26,43 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   int _gender = 0;
   File? image;
 
+  final formKey = GlobalKey<FormState>();
+
+  String? _validateFullName(String? value){
+    if (value == null || value.isEmpty){
+      return "Please enter Username";
+    }
+    return null;
+  }
+
+  String? _validateEmail(String? value){
+    if (value == null || value.isEmpty){
+      return "Please enter Username";
+    }
+    return null;
+  }
+
+  String? _validateHeadline(String? value){
+    if (value == null || value.isEmpty){
+      return "Please enter Username";
+    }
+    return null;
+  }
+
+  String? _validatePhone(String? value){
+    if (value == null || value.isEmpty){
+      return "Please enter Username";
+    }
+    return null;
+  }
+
+  String? _validateAddress(String? value){
+    if (value == null || value.isEmpty){
+      return "Please enter Username";
+    }
+    return null;
+  }
+
   List<String> genders = ["Male", "FeMale"];
 
   @override
@@ -91,9 +128,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
               ),
               const SizedBox(height: 50,),
               Form(
+                key:formKey,
                   child:Column(
                     children: [
                       TextFormField(
+                        validator: _validateFullName,
                         controller: _txtFullName,
                         decoration: const InputDecoration(
                           label: Text("Fullname"),
@@ -102,6 +141,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       ),
                       const SizedBox(height: 10),
                       TextFormField(
+                        validator: _validateEmail,
                         controller: _txtEmail,
                         decoration: const InputDecoration(
                             label: Text("Email"),
@@ -110,6 +150,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       ),
                       const SizedBox(height: 10),
                       TextFormField(
+                        validator: _validateAddress,
                         controller: _txtAddress,
                         decoration: const InputDecoration(
                             label: Text("Address"),
@@ -141,6 +182,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
                       const SizedBox(height: 10),
                       TextFormField(
+                        validator: _validateHeadline,
                         controller: _txtHeadline,
                         decoration: const InputDecoration(
                             label: Text("Headline"),
@@ -149,6 +191,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       ),
                       const SizedBox(height: 10),
                       TextFormField(
+                        validator: _validatePhone,
                         controller: _txtPhone,
                         decoration: const InputDecoration(
                             label: Text("Phone"),
@@ -160,23 +203,24 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         width: 200,
                         child: ElevatedButton(
                           onPressed: () async{
-                            User user = User(
-                                name:_txtFullName.text,
-                                email: _txtEmail.text,
-                                address: _txtAddress.text,
-                                gender: _gender,
-                                headline: _txtHeadline.text,
-                                phone: _txtPhone.text
-                            );
-                            bool isSuccessful =  await UserService.putUser(user);
-                            if (isSuccessful){
-                              Fluttertoast.showToast(msg: "Update Profile Successful");
-                              User updateUser = await UserService.fetchUserDetail();
-                              userController.AddUser(updateUser);
-                            } else {
-                              Fluttertoast.showToast(msg: "Update Profile Failed");
+                            if (formKey.currentState!.validate()){
+                              User user = User(
+                                  name:_txtFullName.text,
+                                  email: _txtEmail.text,
+                                  address: _txtAddress.text,
+                                  gender: _gender,
+                                  headline: _txtHeadline.text,
+                                  phone: _txtPhone.text
+                              );
+                              bool isSuccessful =  await UserService.putUser(user);
+                              if (isSuccessful){
+                                Fluttertoast.showToast(msg: "Update Profile Successful");
+                                User updateUser = await UserService.fetchUserDetail();
+                                userController.AddUser(updateUser);
+                              } else {
+                                Fluttertoast.showToast(msg: "Update Profile Failed");
+                              }
                             }
-
                           },
                           style: ElevatedButton.styleFrom(
                             side: BorderSide.none, shape: const StadiumBorder()
