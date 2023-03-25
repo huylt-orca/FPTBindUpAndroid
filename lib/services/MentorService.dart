@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 import 'StorageService.dart';
 
 class MentorService{
-  static const String urlMentor = server + "mentor/";
+  static const String urlMentor = server + "mentors";
 
   static List<Mentor> parserMentorList(String responseBody){
     var data = json.decode(responseBody) ;
@@ -63,7 +63,7 @@ class MentorService{
   }
 
   static Future<Mentor> fetchMentorDetail(String mentorId  ) async{
-    final response = await http.get(Uri.parse(urlMentor + "$mentorId"));
+    final response = await http.get(Uri.parse(urlMentor + "/$mentorId"));
     if (response.statusCode ==200){
       print ('Get Mentor Detail Successful');
       return compute(parserMentorDetail,response.body);
@@ -83,7 +83,7 @@ class MentorService{
     };
     
     
-    final response = await http.get(Uri.parse(urlMentor + "project/${projectController.id.value}"),headers: headers );
+    final response = await http.get(Uri.parse(urlMentor + "/project/${projectController.id.value}"),headers: headers );
     if (response.statusCode ==200){
       print('Get Mentor List By Project Successful');
       return compute(parserMentorListByProject,response.body);

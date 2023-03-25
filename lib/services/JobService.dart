@@ -9,7 +9,7 @@ import '../models/Job.dart';
 import 'StorageService.dart';
 import 'package:http/http.dart' as http;
 class JobService{
-  static const String urlJob = server + "job/";
+  static const String urlJob = server + "jobs";
 
   static List<Job> parserJobList(String responseBody){
     var data = json.decode(responseBody) ;
@@ -18,7 +18,7 @@ class JobService{
     return jobs;
   }
 
-  static Future<bool> postJob (String title, String description) async {
+  static Future<bool> postJob (String title, String description, String dueDate) async {
     ProjectController projectController = Get.put(ProjectController());
 
     var uri = Uri.parse(urlJob);
@@ -27,6 +27,7 @@ class JobService{
       'name': title,
       'description': description,
       'projectId': projectController.id.value,
+      'dueDate': dueDate
     });
     var headers = {
       'Content-type': 'application/json',
@@ -51,9 +52,9 @@ class JobService{
   static Future<List<Job>> fetchJobList() async{
     ProjectController projectController = Get.put(ProjectController());
 
-    final response = await http.get(Uri.parse(urlJob + "${projectController.id.value}/"));
+    final response = await http.get(Uri.parse(urlJob + "/${projectController.id.value}"));
     if (response.statusCode ==200){
-      print('Get Job List Successful');
+      print('Get Job List by Project Successful');
       return compute(parserJobList,response.body);
     } else if (response.statusCode ==404){
       throw Exception('Not found');

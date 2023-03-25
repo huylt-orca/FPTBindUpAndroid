@@ -42,67 +42,72 @@ class _PopupAddMentorState extends State<PopupAddMentor> {
     return AlertDialog(
       title: Text('Add Mentor'),
       content:
-      Form(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            TextField(
-              onChanged: (value) {
-                keyword=value;
-                _runFilter(value);
-              },
-              decoration: InputDecoration(
-                  labelText: 'Search',
-                  suffixIcon: Icon(Icons.search)
-              ),
-            ),
-            const SizedBox(height: 10,),
-            Container(
-              height: 150,
-              width: 200,
+      Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Form(
+          //   child: Column(
+          //
+          //     children: <Widget>[
+          //       TextField(
+          //         onChanged: (value) {
+          //           keyword=value;
+          //           _runFilter(value);
+          //         },
+          //         decoration: InputDecoration(
+          //             labelText: 'Search',
+          //             suffixIcon: Icon(Icons.search)
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
+          // const SizedBox(height: 10,),
+          Container(
+            height: 250,
+            width: 200,
 
-              child: Column(
+            child: Column(
                 children:[
                   Expanded(
-                  child: ListView.builder(
-                      itemCount: mentors.length,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          child: Container(
-                              margin: EdgeInsets.symmetric(vertical: 2),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: index == _selectedItem ? Colors.blueAccent :Colors.white,
-                                border: Border.all(width: 1,
-                                  color: index == _selectedItem ? Colors.blueAccent :Colors.black,
-                                )
-                            ),
-                            child: ListTile(
-                              leading: ClipRRect(
-                                borderRadius: BorderRadius.circular(100),
-                                child: Image.network(imageDemo,width: 30,height: 30,),
-                              ),
-                              title: Text(mentors[index].name!,
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
-                                ,),
-                              subtitle: Text(mentors[index].major!,
-                                style: TextStyle(fontSize: 12),
-                              ),
+                      child: ListView.builder(
+                          itemCount: mentors.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              child: Container(
+                                margin: EdgeInsets.symmetric(vertical: 2),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: index == _selectedItem ? Colors.blueAccent :Colors.white,
+                                    border: Border.all(width: 1,
+                                      color: index == _selectedItem ? Colors.blueAccent :Colors.black,
+                                    )
+                                ),
+                                child: ListTile(
+                                  leading: ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: Image.network(imageDemo,width: 30,height: 30,),
+                                  ),
+                                  title: Text(mentors[index].name!,
+                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+                                    ,),
+                                  subtitle: Text(mentors[index].major!,
+                                    style: TextStyle(fontSize: 12),
+                                  ),
 
-                            ),
-                          ),
-                          onTap: (){
-                            setState(() {
-                              _selectedItem = index;
-                            });
-                          },
-                        );
-                      })),
-          ]
-              ),
-              ),
-          ],
-        ),
+                                ),
+                              ),
+                              onTap: (){
+                                setState(() {
+                                  _selectedItem = index;
+                                });
+                              },
+                            );
+                          })),
+                ]
+            ),
+          ),
+        ],
       ),
       actions: <Widget>[
         TextButton(

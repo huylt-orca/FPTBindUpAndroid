@@ -18,6 +18,9 @@ class _PopupCreateChangelogState extends State<PopupCreateChangelog> {
     if ( value!.isEmpty){
       return "Please enter Title";
     }
+    if (value.length < 10 || value.length > 100){
+      return "Title must be between 10-100 characters";
+    }
     return null;
   }
 
@@ -40,13 +43,19 @@ class _PopupCreateChangelogState extends State<PopupCreateChangelog> {
             TextFormField(
               validator: _validateTitle,
               controller: _txtTitle,
-              decoration: InputDecoration(labelText: 'Title'),
+              decoration: InputDecoration(
+                  labelText: 'Title',
+                  icon: Icon(Icons.history)
+              ),
             ),
             const SizedBox(height: 10,),
             TextFormField(
               validator: _validateDescription,
               controller: _txtDescription,
-              decoration: InputDecoration(labelText: 'Description'),
+              decoration: InputDecoration(
+                  labelText: 'Description',
+                icon: Icon(Icons.description)
+              ),
             ),
           ],
         ),

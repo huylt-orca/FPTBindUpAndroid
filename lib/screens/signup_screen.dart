@@ -29,11 +29,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (value == null || value.isEmpty){
       return "Please enter Username";
     }
+    if (value.length < 8 || value.length > 40){
+      return "Username must be between 8-40 characters";
+    }
     return null;
   }
   String? _validatePassword(String? value){
     if (value == null || value.isEmpty){
       return "Please enter Password";
+    }
+    if (value.length < 8 || value.length > 40){
+      return "Password must be between 8-40 characters";
     }
     return null;
   }
@@ -47,12 +53,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (value == null || value.isEmpty){
       return "Please enter Name";
     }
+    if (value.length < 6 || value.length > 50){
+      return "Fullname must be between 6-50 characters";
+    }
     return null;
   }
   String? _validatePhone(String? value){
     if (value == null || value.isEmpty){
       return "Please enter Phone";
     }
+    final pattern = r'^\d{10,11}$';
+    final regExp = RegExp(pattern);
+
+    if (!regExp.hasMatch(value)) {
+      return "Phone have 10-11 digits, not have special character";
+    }
+
     return null;
   }
 
@@ -125,11 +141,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             decoration: const InputDecoration(
                                 label: Text("Fullname"),
                                 hintText: "Fullname",
-                                prefixIcon: Icon(LineAwesomeIcons.male)
+                                prefixIcon: Icon(Icons.badge)
                             ),
                           ),
                           const SizedBox(height: 20),
                           DropdownButtonFormField<String>(
+                            value: genders[_gender],
                             items: genders.map((String gender) {
                               return DropdownMenuItem<String>(
                                 value: gender,

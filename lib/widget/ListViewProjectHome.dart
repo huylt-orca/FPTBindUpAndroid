@@ -33,7 +33,6 @@ final scrollController = ScrollController();
   void _runFilter (String value){
 
     ProjectService.fetchProjectList(nameKeyword: value).then((data){
-      print('1234567');
       setState(() {
           list = data;
       });

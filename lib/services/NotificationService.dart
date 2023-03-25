@@ -7,7 +7,7 @@ import '../constants.dart';
 import 'StorageService.dart';
 import 'package:http/http.dart' as http;
 class NotificationService {
-  static const String urlNotification = server + "notification/";
+  static const String urlNotification = server + "notifications";
 
   static List<NotificationCus> parserNotificationList(String responseBody){
     var data = json.decode(responseBody) ;

@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 import 'StorageService.dart';
 
 class ChangelogService{
-  static const String urlChangelog = server + "changelog/";
+  static const String urlChangelog = server + "changelogs";
 
   static List<Changelog> parserChangelogList(String responseBody){
     var data = json.decode(responseBody) ;
@@ -32,6 +32,8 @@ class ChangelogService{
         int page =0,
         int pageSize =4,
         bool paging = false,
+        String sortBy = 'created_timestamp',
+        String ascending = 'DESC',
         required String projectId
       }) async{
 
@@ -40,6 +42,8 @@ class ChangelogService{
         "&pageNo=${page}"
         "&paging=${paging}"
         "&projectId=${projectId}"
+        "&sortBy=${sortBy}"
+        "&ascending=${ascending}"
     ;
     final response = await http.get(Uri.parse(urlChangelog + options));
     print(response.statusCode);
@@ -54,7 +58,7 @@ class ChangelogService{
   }
 
   static Future<Changelog> fetchChangelogDetail( String changelogId  ) async{
-    final response = await http.get(Uri.parse(urlChangelog + "$changelogId"));
+    final response = await http.get(Uri.parse(urlChangelog + "/${changelogId}"));
     if (response.statusCode ==200){
       print('Get Changelog Detail Successful');
       return compute(parserChangelogDetail,response.body);

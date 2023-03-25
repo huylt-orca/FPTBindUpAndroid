@@ -2,6 +2,7 @@ import 'package:android/constants.dart';
 import 'package:android/models/responsetest.dart';
 import 'package:android/screens/project_create_screen.dart';
 import 'package:android/services/ProjectService.dart';
+import 'package:android/services/UserService.dart';
 import 'package:android/widget/MyProjectCard.dart';
 import 'package:flutter/material.dart';
 
@@ -17,27 +18,33 @@ class MyProjectWidget extends StatefulWidget {
 
 class _MyProjectWidgetState extends State<MyProjectWidget> {
   List<Project> list = List<Project>.empty(growable: true);
+  bool _isWhat = true;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (this.widget.isOwner){
+
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (this.widget.isOwner && _isWhat){
       ProjectService.fetchOwnerProjectList().then(
               (data) {
             setState(() {
               list = data;
             });});
-    } else{
-      setState(() {
-        list = [];
-      });
+      _isWhat = !_isWhat;
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
+    if (!this.widget.isOwner && !_isWhat){
+      UserService.fetchProjectListByUser().then((data) {
+        setState(() {
+          list = data;
+        });
+      });
+      _isWhat = !_isWhat;
+    }
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(

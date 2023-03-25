@@ -13,8 +13,8 @@ class AuthService{
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final UserController userController = Get.put(UserController());
-  static final String urlAuth = server + "auth/";
-  static final String urlAccount = server + "account/";
+  static final String urlAuth = server + "auth";
+  static final String urlAccount = server + "accounts";
 
 
    Future<String> signInWithEmailAndPassword(String email, String password) async {
@@ -67,8 +67,8 @@ class AuthService{
     final User? user = authResult.user;
 
     String token = await user!.getIdToken() ;
-
-    final uri = Uri.parse(urlAuth+"google");
+    print(token);
+    final uri = Uri.parse(urlAuth+"/google");
 
     final body = jsonEncode(token);
 
@@ -98,7 +98,7 @@ class AuthService{
   {required String username, required String password, required String fullname,
     required int gender,required String email,required String phone}
       ) async {
-    var uri = Uri.parse(urlAuth + "new");
+    var uri = Uri.parse(urlAuth + "/new");
     var body = jsonEncode({
       'username': username,
       'password': password,
@@ -142,7 +142,7 @@ class AuthService{
 
   static Future<void> sendToken() async {
      UserController userController = Get.put(UserController());
-    final uri = Uri.parse(urlAccount + "${await StorageService.getDeviceToken()}");
+    final uri = Uri.parse(urlAccount + "/${await StorageService.getDeviceToken()}");
 
     print(userController.id.value);
     var headers = {

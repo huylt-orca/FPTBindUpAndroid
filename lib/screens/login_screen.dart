@@ -27,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (value == null || value.isEmpty){
       return "Please enter Username";
     }
+
     return null;
   }
 

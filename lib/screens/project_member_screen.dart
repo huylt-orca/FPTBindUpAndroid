@@ -62,7 +62,7 @@ class _ProjectMemberScreenState extends State<ProjectMemberScreen> {
 
     return
         Container(
-          height: 350,
+          height: 450,
           padding: EdgeInsets.symmetric(horizontal: 5),
           child: Column(
             children: [

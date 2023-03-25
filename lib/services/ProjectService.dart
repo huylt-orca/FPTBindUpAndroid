@@ -22,11 +22,25 @@ import 'package:http/http.dart' as http;
 import '../models/Topic.dart';
 
 class ProjectService{
-  static const String urlProject = server + "project/";
+  static const String urlProject = server + "projects";
 
   static List<Project> parserProjectList(String responseBody){
     var data = json.decode(responseBody) ;
     var list = data['data']['projectDTOList'] as List<dynamic>;
+    List<Project> projects = list.map((model) => Project.fromJson(model)).toList();
+    return projects;
+  }
+
+  static List<Project> parserProjectListByUserJoin(String responseBody){
+    var data = json.decode(responseBody) ;
+    var list = data['data'] as List<dynamic>;
+    List<Project> projects = list.map((model) => Project.fromJson(model)).toList();
+    return projects;
+  }
+
+  static List<Project> parserProjectListHome(String responseBody){
+    var data = json.decode(responseBody) ;
+    var list = data['data']['projectDTOWithTopicList'] as List<dynamic>;
     List<Project> projects = list.map((model) => Project.fromJson(model)).toList();
     return projects;
   }
@@ -110,7 +124,7 @@ class ProjectService{
     final response = await http.get(Uri.parse(urlProject + options));
     if (response.statusCode ==200){
       print('Get Líst Project Successful');
-      return compute(parserProjectList,response.body);
+      return compute(parserProjectListHome,response.body);
     } else if (response.statusCode ==404){
       throw Exception('Not found');
     } else{
@@ -119,7 +133,7 @@ class ProjectService{
   }
 
   static Future<Project> fetchProjectDetail( String projectId  ) async{
-    final response = await http.get(Uri.parse(urlProject + "${projectId}"));
+    final response = await http.get(Uri.parse(urlProject + "/${projectId}"));
     if (response.statusCode ==200){
       print('Get Project Detail Successful');
       ProjectController projectController = Get.put(ProjectController());
@@ -171,7 +185,7 @@ class ProjectService{
   }
 
   static Future<List<ProjectImage>> fetchProjectImageList(String projectId) async{
-    final response = await http.get(Uri.parse(urlProject + "$projectId/image/"));
+    final response = await http.get(Uri.parse(urlProject + "/$projectId/image"));
     if (response.statusCode ==200){
       print('Get List Project Image Successful');
       return compute(parserProjectImageList,response.body);
@@ -210,7 +224,7 @@ class ProjectService{
 
         if (imageFile != null) {
           // upload image
-          final urlImage = urlProject + responseData['data'] + "/logo/";
+          final urlImage = urlProject + "/" + responseData['data'] + "/logo";
 
           final request = http.MultipartRequest(
             'POST',
@@ -253,8 +267,8 @@ class ProjectService{
       'Authorization': 'Bearer ${await StorageService.getAccessToken()}'
     };
     String options = "?";
-    topics.forEach((topic) => options += "topicIds=${topic.id!}");
-    var uri = Uri.parse(urlProject + projectId +"/topic" + options);
+    topics.forEach((topic) => options += "topicIds=${topic.id!}&");
+    var uri = Uri.parse(urlProject + "/${projectId}/topic" + options);
     // List<String> topicId = [];
     // topics.forEach((topic) => topicId.add(topic.id!));
     // final body = json.encode(topicId);
@@ -273,7 +287,7 @@ class ProjectService{
   static Future<List<Project>> fetchOwnerProjectList() async{
     UserController userController = Get.put(UserController());
 
-    final response = await http.get(Uri.parse(UserService.urlUser +"${userController.id}/projects"));
+    final response = await http.get(Uri.parse(UserService.urlUser +"/${userController.id}/projects"));
     if (response.statusCode ==200){
       print('Get List Project By userId Successful');
       return compute(parserProjectList,response.body);
@@ -327,7 +341,7 @@ class ProjectService{
       'Authorization': 'Bearer ${await StorageService.getAccessToken()}'
     };
 
-    var uri = Uri.parse(urlProject + projectId +"/vote?userId=${userController.id.value}");
+    var uri = Uri.parse(urlProject + "/${projectId}/vote?userId=${userController.id.value}");
 
     try {
       final response = await http.post(uri,headers: headers);
@@ -353,7 +367,7 @@ class ProjectService{
       'Authorization': 'Bearer ${await StorageService.getAccessToken()}'
     };
 
-    var uri = Uri.parse(urlProject + projectController.id.value +"/mentor?mentorId=${mentorId}");
+    var uri = Uri.parse(urlProject + "/${projectController.id.value}/mentor?mentorId=${mentorId}");
     // final body = json.encode(mentorId);
     try {
       final response = await http.post(uri,headers: headers);

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:android/controller/UserController.dart';
 import 'package:android/models/ProjectImage.dart';
+import 'package:android/services/ProjectService.dart';
 import 'package:android/services/StorageService.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -13,8 +14,8 @@ import 'package:http/http.dart' as http;
 import '../models/User.dart';
 
 class UserService{
-  static const String urlAuth = server + "auth/";
-  static const String urlUser = server + "user/";
+  static const String urlAuth = server + "auth";
+  static const String urlUser = server + "users";
 
 
   static List<User> parserUserList(String responseBody){
@@ -79,7 +80,7 @@ class UserService{
       User mainUser = await compute(parserUserId,mainresponse.body);
 
       final response = await http.get(
-          Uri.parse(urlUser + "${mainUser.id}"),
+          Uri.parse(urlUser + "/${mainUser.id}"),
           headers: {
             'Authorization': 'Bearer $accessToken',
           }
@@ -134,7 +135,7 @@ class UserService{
   static Future<bool> putUser(User user) async {
     UserController userController = Get.put(UserController());
 
-    var uri = Uri.parse(urlUser + userController.id.value);
+    var uri = Uri.parse(urlUser + "/" +userController.id.value);
 
     var body = jsonEncode({
       'name': user.name,
@@ -163,5 +164,18 @@ class UserService{
       print('Error: $error');
     }
     return false;
+  }
+
+  static Future<List<Project>> fetchProjectListByUser() async{
+    UserController userController = Get.put(UserController());
+    final response = await http.get(Uri.parse(urlUser + "/${userController.id.value}/members"));
+    if (response.statusCode ==200){
+      print('Get Líst Project By User Join Successful');
+      return compute(ProjectService.parserProjectListByUserJoin,response.body);
+    } else if (response.statusCode ==404){
+      throw Exception('Not found');
+    } else{
+      throw Exception('Can\'t get');
+    }
   }
 }

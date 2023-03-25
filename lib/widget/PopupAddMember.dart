@@ -23,6 +23,9 @@ class _PopupAddMemberState extends State<PopupAddMember> {
     if (value == null || value.isEmpty){
       return "Please enter Name";
     }
+    if (value.length < 1 || value.length > 100){
+      return "Name must be between 1-100 characters";
+    }
     return null;
   }
 
@@ -30,12 +33,18 @@ class _PopupAddMemberState extends State<PopupAddMember> {
     if (value == null || value.isEmpty){
       return "Please enter Title";
     }
+    if (value.length < 1 || value.length > 100){
+      return "Title must be between 1-100 characters";
+    }
     return null;
   }
 
   String? _validateRole(String? value){
     if (value == null || value.isEmpty){
       return "Please enter Role";
+    }
+    if (value.length < 1 || value.length > 30){
+      return "Role must be between 1-30 characters";
     }
     return null;
   }
@@ -52,19 +61,28 @@ class _PopupAddMemberState extends State<PopupAddMember> {
             TextFormField(
                validator: _validateName,
               controller: _txtName,
-              decoration: InputDecoration(labelText: 'Name'),
+              decoration: InputDecoration(
+                  labelText: 'Name',
+                icon: Icon(Icons.person)
+              ),
             ),
             const SizedBox(height: 10,),
             TextFormField(
               validator: _validateTitle,
               controller: _txtTitle,
-              decoration: InputDecoration(labelText: 'Title'),
+              decoration: InputDecoration(
+                icon: Icon(Icons.text_format),
+                  labelText: 'Title'
+              ),
             ),
             const SizedBox(height: 10,),
             TextFormField(
               validator: _validateRole,
               controller: _txtRole,
-              decoration: InputDecoration(labelText: 'Role'),
+              decoration: InputDecoration(
+                  labelText: 'Role',
+                icon: Icon(Icons.developer_mode)
+              ),
             ),
           ],
         ),

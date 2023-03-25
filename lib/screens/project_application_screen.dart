@@ -35,7 +35,7 @@ class _ProjectApplicationScreenState extends State<ProjectApplicationScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 350,
+      height: 450,
       padding: EdgeInsets.symmetric(horizontal: 5),
       child: Column(
         children: [

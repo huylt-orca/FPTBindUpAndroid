@@ -3,7 +3,7 @@ import 'package:android/services/JobService.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-
+import 'package:intl/intl.dart';
 class PopupAddJob extends StatefulWidget {
   const PopupAddJob({Key? key}) : super(key: key);
 
@@ -15,6 +15,8 @@ class _PopupAddJobState extends State<PopupAddJob> {
 
   TextEditingController _txtTitle = TextEditingController();
   TextEditingController _txtDescription = TextEditingController();
+  TextEditingController _txtDueDate = TextEditingController();
+
   ProjectController projectController = Get.put(ProjectController());
   final formKey = GlobalKey<FormState>();
 
@@ -22,12 +24,21 @@ class _PopupAddJobState extends State<PopupAddJob> {
     if (value == null || value.isEmpty){
       return "Please enter Title";
     }
+    if (value.length < 1 || value.length > 100 ){
+      return "Title must be 1-100 characters";
+    }
     return null;
   }
 
   String? _validateDescription(String? value){
     if (value == null || value.isEmpty){
       return "Please enter Description";
+    }
+    return null;
+  }
+  String? _validateDueDate(String? value){
+    if (value == null || value.isEmpty){
+      return "Please enter Due Date";
     }
     return null;
   }
@@ -44,12 +55,38 @@ class _PopupAddJobState extends State<PopupAddJob> {
             TextFormField(
               validator: _validateTitle,
               controller: _txtTitle,
-              decoration: InputDecoration(labelText: 'Title'),
+              decoration: InputDecoration(
+                  icon: Icon(Icons.work),
+                  labelText: 'Title'),
             ),
             TextFormField(
               validator: _validateDescription,
               controller: _txtDescription,
-              decoration: InputDecoration(labelText: 'Description'),
+              decoration: InputDecoration(
+                  labelText: 'Description',
+                icon: Icon(Icons.info)
+              ),
+            ),
+            TextFormField(
+              validator: _validateDueDate,
+              controller: _txtDueDate,
+              decoration: InputDecoration(
+                  labelText: 'Due Date',
+                icon: Icon(Icons.calendar_month),
+              ),
+              onTap: () async{
+                DateTime? pickDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime(2024));
+
+                if (pickDate!=null){
+                  setState(() {
+                    _txtDueDate.text = DateFormat('yyyy-MM-dd').format(pickDate);
+                  });
+                }
+              },
             ),
           ],
         ),
@@ -65,7 +102,7 @@ class _PopupAddJobState extends State<PopupAddJob> {
           child: Text('Create'),
           onPressed: () async {
             if (formKey.currentState!.validate()){
-              bool isSuccessful = await JobService.postJob(_txtTitle.text, _txtDescription.text);
+              bool isSuccessful = await JobService.postJob(_txtTitle.text, _txtDescription.text,_txtDueDate.text);
               if (isSuccessful){
                 Fluttertoast.showToast(
                     msg: "Create Job Successful",

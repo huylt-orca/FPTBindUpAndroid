@@ -11,7 +11,7 @@ import '../constants.dart';
 import 'StorageService.dart';
 
 class ApplicationService{
-  static const String urlApplication = server + "application/";
+  static const String urlApplication = server + "applications";
 
   static List<Application> parserApplicationList(String responseBody){
     var data = json.decode(responseBody) ;
@@ -44,9 +44,9 @@ class ApplicationService{
       if (response.statusCode == 200){
         print('Apply to Project Successful');
         final dataResponse = json.decode(response.body)['data'];
-        if (dataResponse !=""){
-          return false;
-        }
+        // if (dataResponse !=""){
+        //   return false;
+        // }
         return true;
       } else{
         print('Error: ${response.reasonPhrase}');
@@ -95,7 +95,7 @@ class ApplicationService{
   static Future<bool> putProject(String applicationId, ApplicationStatus status) async {
 
     String options =
-        "status?applicationId=${applicationId}"
+        "/status?applicationId=${applicationId}"
         "&applicationStatus=${status.name}"
     ;
     print (status.name);
@@ -132,7 +132,7 @@ class ApplicationService{
     UserController userController = Get.put(UserController());
 
     String options =
-        "user/?pageSize=${pageSize}"
+        "/user?pageSize=${pageSize}"
         "&pageNo=${page}"
         "&sortBy=${sortBy}"
         "&ascending=${ascending}"

@@ -12,7 +12,7 @@ import 'package:http/http.dart' as http;
 import 'StorageService.dart';
 
 class ProjectMemberService{
-  static const String urlMember = server + "member/";
+  static const String urlMember = server + "members";
 
   static List<Member> parserMemberList(String responseBody){
     var data = json.decode(responseBody) ;
@@ -60,10 +60,17 @@ class ProjectMemberService{
     }
   }
 
-  static Future<List<Member>> fetchMemberListByProjectId() async{
+  static Future<List<Member>> fetchMemberListByProjectId({
+    bool paging = false,
+    int pageNo = 0,
+    int pageSize =10
+  }) async{
     ProjectController projectController = Get.put(ProjectController());
     String options =
         "?&projectId=${projectController.id.value}"
+        "&paging=${paging}"
+        "&pageNo=${pageNo}"
+        "&pageSize=${pageSize}"
     ;
     final response = await http.get(Uri.parse(urlMember + options));
     if (response.statusCode ==200){
@@ -77,7 +84,7 @@ class ProjectMemberService{
   }
 
   static Future<Member> fetchMemberDetail( String memberId  ) async{
-    final response = await http.get(Uri.parse(urlMember + "$memberId"));
+    final response = await http.get(Uri.parse(urlMember + "/$memberId"));
     if (response.statusCode ==200){
       print('Get Member Detail Successful');
       return compute(parserMemberDetail,response.body);

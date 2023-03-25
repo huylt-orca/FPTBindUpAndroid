@@ -69,7 +69,10 @@ class _PopupApplyJobState extends State<PopupApplyJob> {
             TextFormField(
               validator: _validateDescription,
               controller: _txtDescription,
-              decoration: InputDecoration(labelText: 'Description'),
+              decoration: InputDecoration(
+                  labelText: 'Description',
+                icon: Icon(Icons.description)
+              ),
             ),
           ],
         ),

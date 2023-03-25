@@ -7,7 +7,7 @@ import '../models/Topic.dart';
 import 'package:http/http.dart' as http;
 
 class TopicService{
-  static const String urlTopic = server + "topic/";
+  static const String urlTopic = server + "topics";
 
   static List<Topic> parserTopicList(String responseBody){
     var data = json.decode(responseBody) ;
@@ -47,7 +47,7 @@ class TopicService{
   }
 
   static Future<Topic> fetchTopicDetail( String topicId  ) async{
-    final response = await http.get(Uri.parse(urlTopic + "$topicId"));
+    final response = await http.get(Uri.parse(urlTopic + "/$topicId"));
     if (response.statusCode ==200){
       print('Get Topic Detail Successful');
       return compute(parserTopicDetail,response.body);
